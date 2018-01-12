@@ -19,9 +19,8 @@
           </div>
           <div class="hero-body">
             <div class="container is-widescreen has-text-centered">
-              <div class="columns">
-                <div class="column"></div>
-                <div class="column">
+              <div class="columns is-centered">
+                <div class="column is-4">
                   <el-form ref="form" :model="selected">
                     <el-form-item>
                       <el-input v-model="selected.name" placeholder="Agrega un nombre" suffix-icon="el-icon-edit" :disabled="isLoading"></el-input>
@@ -41,7 +40,6 @@
                     </el-form-item>
                   </el-form>
                 </div>
-                <div class="column"></div>
               </div>
             </div>
           </div>
