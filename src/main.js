@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueFire from 'vuefire'
-import {Input, Form, FormItem} from 'element-ui'
+import {Input, Form, FormItem, Select, Option} from 'element-ui'
 
 // UI
 import Buefy from 'buefy'
@@ -16,6 +16,8 @@ Vue.use(VueFire)
 Vue.use(Input)
 Vue.use(Form)
 Vue.use(FormItem)
+Vue.use(Select)
+Vue.use(Option)
 
 Vue.config.productionTip = false
 

@@ -1,0 +1,214 @@
+<template lang="html">
+  <div>
+    <transition name="fade">
+      <div class="modal" v-if="modalActive">
+        <section class="hero is-fullheight section">
+          <div class="hero-header">
+            <div class="level">
+              <div class="level-item"></div>
+              <div class="level-item">
+                <h1 class="title is-12 has-text-info" v-if="getKey() === undefined">Nuevo Sitio</h1>
+                <h1 class="title is-12 has-text-info" v-if="getKey() !== undefined">Editar Sitio</h1>
+              </div>
+              <div class="level-item">
+                <a href="javascript:;" @click="cancelModal">
+                  <i class="has-text-grey-light subtitle el-icon-close"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="hero-body">
+            <div class="container is-widescreen has-text-centered">
+              <div class="columns is-centered">
+                <div class="column is-4">
+                  <el-form ref="siteform" :model="selected" :rules="rules">
+                    <el-form-item prop="name">
+                      <el-input v-model="selected.name" placeholder="Agrega un nombre" suffix-icon="el-icon-edit" :disabled="isLoading"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="url">
+                      <el-input placeholder="Agrega una url" suffix-icon="el-icon-share" :disabled="isLoading" v-model="selected.url"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="folder">
+                      <el-select @change="changef" filterable allow-create v-model="selected.folder" placeholder="Carpeta" :disabled="isLoading" style="width: 100%" no-data-text="No hay carpetas creadas">
+                        <el-option v-for="folder in folders" :key="folder['.key']" :label="folder['.value']" :value="folder['.key']">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                      <div class="field is-grouped">
+                        <p class="control">
+                          <a class="button is-info" :class="{'is-loading':isLoading}" @click="onClickSaveButton">Guardar</a>
+                        </p>
+                        <p class="control">
+                          <a class="button" :disabled="isLoading" @click="cancelModal">Cancelar</a>
+                        </p>
+                      </div>
+                    </el-form-item>
+                  </el-form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script>
+
+import {db} from '@/firebase'
+
+export default {
+  name: 'add',
+  created () {
+    window.addEventListener('keyup', this.cancelModal)
+  },
+  mounted () {
+    if (this.getKey() !== undefined && this.getFolder() !== undefined) {
+      this.$bindAsObject('selected', db.ref('sites/' + this.getFolder()).child(this.getKey()), null, () => {
+        this.modalActive = true
+      })
+    } else {
+      this.modalActive = true
+    }
+  },
+  data () {
+    return {
+      selected: {
+        name: null,
+        url: null,
+        folder: null
+      },
+      rules: {
+        name: [
+          { required: true, message: 'Por favor agrega un nombre', trigger: 'change' }
+        ],
+        url: [
+          { required: true, message: 'Por favor agrega una url', trigger: 'change' },
+          { validator: this.validateUrl, trigger: 'change' }
+        ],
+        folder: [
+          { required: true, message: 'Por favor selecciona o agrega una carpeta', trigger: 'change' }
+        ]
+      },
+      modalActive: false,
+      isLoading: false,
+      folders: null,
+      newFolderName: ''
+    }
+  },
+  methods: {
+    onClickSaveButton () {
+      this.$refs.siteform.validate((valid) => {
+        if (valid) {
+          if (this.getKey() !== undefined) {
+            this.editSite()
+          } else {
+            this.saveSite()
+          }
+        } else {
+          return false
+        }
+      })
+    },
+    saveSite () {
+      this.isLoading = true
+      this.selected.folder = this.lowerFolder
+      const reference = db.ref(`sites/${this.selected.folder}`)
+      const key = reference.push().key
+      reference.child(key).update(this.selected).then(() => {
+        this.isLoading = false
+        this.saveFolder()
+        this.showNotification('Sitio agregado correctamente', false)
+        this.$router.push('/')
+      }).catch(() => {
+        this.isLoading = false
+        this.showNotification('Ocurrio un error al guardar', true)
+      })
+    },
+    editSite () {
+      this.isLoading = true
+      this.selected.folder = this.lowerFolder
+      const reference = db.ref(`sites/${this.selected.folder}`)
+      delete this.selected['.key']
+      reference.child(this.getKey()).update(this.selected).then(() => {
+        this.isLoading = false
+        this.saveFolder()
+        this.showNotification('Sitio editado correctamente', false)
+        this.removeOld()
+      }).catch(() => {
+        this.isLoading = false
+        this.showNotification('Ocurrio un error al guardar', true)
+      })
+    },
+    cancelModal (event) {
+      if (!this.isLoading) {
+        if (event.key !== undefined && event.key !== 'Escape') {
+          return
+        }
+
+        this.$router.push('/')
+      }
+    },
+    removeOld () {
+      if (this.selected.folder !== this.getFolder()) {
+        db.ref('sites').child(this.getFolder()).child(this.getKey()).remove()
+      }
+
+      this.cancelModal({})
+    },
+    getKey () {
+      return this.$route.params.key
+    },
+    getFolder () {
+      return this.$route.params.folder
+    },
+    showNotification (text, isError) {
+      this.$toast.open({
+        message: text,
+        type: isError ? 'is-danger' : 'is-info',
+        position: 'is-bottom'
+      })
+    },
+    validateUrl (rule, value, callback) {
+      const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/
+      if (regex.test(value)) {
+        callback()
+      } else {
+        callback(new Error('Por favor agrega una url válida'))
+      }
+    },
+    saveFolder () {
+      if (this.newFolderName !== '') {
+        db.ref(`folders/${this.selected.folder.toLowerCase()}`).set(this.newFolderName)
+      }
+    },
+    changef (event) {
+      if (this.selected.folder !== this.lowerFolder) {
+        this.newFolderName = event
+      }
+    }
+  },
+  computed: {
+    lowerFolder () {
+      return this.selected.folder.toLowerCase()
+    }
+  },
+  firebase: {
+    folders: db.ref('folders')
+  }
+}
+</script>
+
+<style scoped>
+.modal {
+  display: block;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+}
+</style>
