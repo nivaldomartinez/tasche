@@ -46,6 +46,9 @@
                   <nav class="level">
                     <div class="level-left">
                       <a class="level-item">
+                        <a class="button is-small" :href="props.url" target="_blank">Ver</a>
+                      </a>
+                      <a class="level-item">
                         <a class="button is-info is-small" @click="$router.push({name: 'editsite', params: {key:site['.key'], folder:site.folder}})">Editar</a>
                       </a>
                       <a class="level-item">
@@ -70,18 +73,23 @@ import LinkPrevue from 'link-prevue'
 
 export default {
   name: 'home',
+  created () {
+    this.currentUser = JSON.parse(localStorage.getItem('user'))
+    this.$bindAsArray('folders', db.ref(`folders/${this.currentUser.uid}`))
+  },
   components: {
     LinkPrevue
   },
   data () {
     return {
       sites: [],
-      folders: null
+      folders: null,
+      currentUser: null
     }
   },
   methods: {
     findSitesByFolder (folder) {
-      this.$bindAsArray('sites', db.ref('sites/' + folder['.key']))
+      this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}/${folder['.key']}`))
     },
     deleteSite (folder, site) {
       this.$snackbar.open({
@@ -91,7 +99,7 @@ export default {
         actionText: 'Eliminar',
         queue: false,
         onAction: () => {
-          db.ref(`sites/${folder}/${site}`).remove()
+          db.ref(`sites/${this.currentUser.uid}/${folder}/${site}`).remove()
           this.$toast.open({
             message: 'Se eliminó correctamente',
             queue: false,
@@ -109,8 +117,8 @@ export default {
         actionText: 'Eliminar',
         queue: false,
         onAction: () => {
-          db.ref(`sites/${folder}`).remove()
-          db.ref(`folders/${folder}`).remove()
+          db.ref(`sites/${this.currentUser.uid}/${folder}`).remove()
+          db.ref(`folders/${this.currentUser.uid}/${folder}`).remove()
           this.$toast.open({
             message: 'Se eliminó correctamente',
             queue: false,
@@ -120,9 +128,6 @@ export default {
         }
       })
     }
-  },
-  firebase: {
-    folders: db.ref('folders')
   }
 }
 </script>

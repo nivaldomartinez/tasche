@@ -5,10 +5,14 @@ var config = {
   authDomain: 'poker-webapi.firebaseapp.com',
   databaseURL: 'https://poker-webapi.firebaseio.com',
   projectId: 'poker-webapi',
-  storageBucket: '',
+  storageBucket: 'poker-webapi.appspot.com',
   messagingSenderId: '478384870633'
 }
 
 Firebase.initializeApp(config)
 
 export const db = Firebase.database()
+export const auth = Firebase.auth()
+export const googleProvider = new Firebase.auth.GoogleAuthProvider()
+export const twitterProvider = new Firebase.auth.TwitterAuthProvider()
+export const githubProvider = new Firebase.auth.GithubAuthProvider()

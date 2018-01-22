@@ -1,23 +1,13 @@
 <template>
   <div id="app">
-    <element-menu></element-menu>
-    <section class="section">
-      <div class="container is-fluid">
-        <router-view/>
-      </div>
-    </section>
+    <router-view/>
   </div>
 </template>
 <!-- R66RMP -->
+
 <script>
-
-import ElementMenu from '@/components/Menu'
-
 export default {
-  name: 'app',
-  components: {
-    ElementMenu
-  }
+  name: 'app'
 }
 </script>
 

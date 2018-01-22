@@ -62,11 +62,13 @@ import {db} from '@/firebase'
 export default {
   name: 'add',
   created () {
+    this.currentUser = JSON.parse(localStorage.getItem('user'))
+    this.$bindAsArray('folders', db.ref(`folders/${this.currentUser.uid}`))
     window.addEventListener('keyup', this.cancelModal)
   },
   mounted () {
     if (this.getKey() !== undefined && this.getFolder() !== undefined) {
-      this.$bindAsObject('selected', db.ref('sites/' + this.getFolder()).child(this.getKey()), null, () => {
+      this.$bindAsObject('selected', db.ref(`sites/${this.currentUser.uid}/${this.getFolder()}`).child(this.getKey()), null, () => {
         this.modalActive = true
       })
     } else {
@@ -78,7 +80,8 @@ export default {
       selected: {
         name: null,
         url: null,
-        folder: null
+        folder: null,
+        currentUser: null
       },
       rules: {
         name: [
@@ -115,13 +118,13 @@ export default {
     saveSite () {
       this.isLoading = true
       this.selected.folder = this.lowerFolder
-      const reference = db.ref(`sites/${this.selected.folder}`)
+      const reference = db.ref(`sites/${this.currentUser.uid}/${this.selected.folder}`)
       const key = reference.push().key
       reference.child(key).update(this.selected).then(() => {
         this.isLoading = false
         this.saveFolder()
         this.showNotification('Sitio agregado correctamente', false)
-        this.$router.push('/')
+        this.$router.push('/dashboard')
       }).catch(() => {
         this.isLoading = false
         this.showNotification('Ocurrio un error al guardar', true)
@@ -130,7 +133,7 @@ export default {
     editSite () {
       this.isLoading = true
       this.selected.folder = this.lowerFolder
-      const reference = db.ref(`sites/${this.selected.folder}`)
+      const reference = db.ref(`sites/${this.currentUser.uid}/${this.selected.folder}`)
       delete this.selected['.key']
       reference.child(this.getKey()).update(this.selected).then(() => {
         this.isLoading = false
@@ -148,7 +151,7 @@ export default {
           return
         }
 
-        this.$router.push('/')
+        this.$router.push('/dashboard')
       }
     },
     removeOld () {
@@ -181,7 +184,7 @@ export default {
     },
     saveFolder () {
       if (this.newFolderName !== '') {
-        db.ref(`folders/${this.selected.folder.toLowerCase()}`).set(this.newFolderName)
+        db.ref(`folders/${this.currentUser.uid}/${this.selected.folder.toLowerCase()}`).set(this.newFolderName)
       }
     },
     changef (event) {
@@ -194,9 +197,6 @@ export default {
     lowerFolder () {
       return this.selected.folder.toLowerCase()
     }
-  },
-  firebase: {
-    folders: db.ref('folders')
   }
 }
 </script>
