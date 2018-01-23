@@ -1,12 +1,12 @@
 import Firebase from 'firebase'
 
-var config = {
-  apiKey: 'AIzaSyC__QkkhAKb3B3rvTU0dAA4sT4IpU98dl8',
-  authDomain: 'poker-webapi.firebaseapp.com',
-  databaseURL: 'https://poker-webapi.firebaseio.com',
-  projectId: 'poker-webapi',
-  storageBucket: 'poker-webapi.appspot.com',
-  messagingSenderId: '478384870633'
+const config = {
+  apiKey: 'AIzaSyDj6ssH7GM7X_6SqE_vA_bseRV6lhQhlpY',
+  authDomain: 'tasche-web.firebaseapp.com',
+  databaseURL: 'https://tasche-web.firebaseio.com',
+  projectId: 'tasche-web',
+  storageBucket: '',
+  messagingSenderId: '542476823252'
 }
 
 Firebase.initializeApp(config)

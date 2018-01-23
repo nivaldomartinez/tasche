@@ -58,9 +58,11 @@
 <script>
 
 import {db} from '@/firebase'
+import {defaultMixin} from '@/mixins'
 
 export default {
   name: 'add',
+  mixins: [defaultMixin],
   created () {
     this.currentUser = JSON.parse(localStorage.getItem('user'))
     this.$bindAsArray('folders', db.ref(`folders/${this.currentUser.uid}`))
@@ -166,13 +168,6 @@ export default {
     },
     getFolder () {
       return this.$route.params.folder
-    },
-    showNotification (text, isError) {
-      this.$toast.open({
-        message: text,
-        type: isError ? 'is-danger' : 'is-info',
-        position: 'is-bottom'
-      })
     },
     validateUrl (rule, value, callback) {
       const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/

@@ -70,9 +70,11 @@
 <script>
 import {db} from '@/firebase'
 import LinkPrevue from 'link-prevue'
+import {defaultMixin} from '@/mixins'
 
 export default {
   name: 'home',
+  mixins: [defaultMixin],
   created () {
     this.currentUser = JSON.parse(localStorage.getItem('user'))
     this.$bindAsArray('folders', db.ref(`folders/${this.currentUser.uid}`))
@@ -92,40 +94,16 @@ export default {
       this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}/${folder['.key']}`))
     },
     deleteSite (folder, site) {
-      this.$snackbar.open({
-        message: '¿Seguro que quieres eliminar el sitio?',
-        type: 'is-danger',
-        position: 'is-bottom-right',
-        actionText: 'Eliminar',
-        queue: false,
-        onAction: () => {
-          db.ref(`sites/${this.currentUser.uid}/${folder}/${site}`).remove()
-          this.$toast.open({
-            message: 'Se eliminó correctamente',
-            queue: false,
-            position: 'is-bottom',
-            type: 'is-info'
-          })
-        }
+      this.showDeleteConfirmation('¿Seguro que quieres eliminar el sitio?', 'is-bottom-right', () => {
+        db.ref(`sites/${this.currentUser.uid}/${folder}/${site}`).remove()
+        this.showNotification('Se eliminó correctamente', false)
       })
     },
     deleteFolder (folder) {
-      this.$snackbar.open({
-        message: '¿Seguro que quieres eliminar la carpeta? Se eliminarán todos los sitios de la carpeta',
-        type: 'is-danger',
-        position: 'is-bottom-left',
-        actionText: 'Eliminar',
-        queue: false,
-        onAction: () => {
-          db.ref(`sites/${this.currentUser.uid}/${folder}`).remove()
-          db.ref(`folders/${this.currentUser.uid}/${folder}`).remove()
-          this.$toast.open({
-            message: 'Se eliminó correctamente',
-            queue: false,
-            position: 'is-bottom',
-            type: 'is-info'
-          })
-        }
+      this.showDeleteConfirmation('¿Seguro que quieres eliminar la carpeta? Se eliminarán todos los sitios de la carpeta', 'is-bottom-left', () => {
+        db.ref(`sites/${this.currentUser.uid}/${folder}`).remove()
+        db.ref(`folders/${this.currentUser.uid}/${folder}`).remove()
+        this.showNotification('Se eliminó correctamente', false)
       })
     }
   }
