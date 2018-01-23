@@ -2,7 +2,10 @@
   <section>
     <nav class="navbar is-info">
       <div class="navbar-brand">
-        <router-link active-class="is-active" class="navbar-item" to="/">
+        <router-link active-class="is-active" class="navbar-item" to="/dashboard">
+          <figure class="image is-32x32 menu-img">
+            <img src="/static/logo-white.png" alt="Image">
+          </figure>
           <h1><strong>Tasche</strong></h1>
         </router-link>
         <div :class="{'is-active':isMenuActive}" class="navbar-burger burger" @click="activeMenu" data-target="menu-tasche">

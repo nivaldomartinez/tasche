@@ -1,8 +1,9 @@
 <template lang="html">
   <div class="hero is-fullheight">
     <div class="hero-body columns is-centered">
-      <div class="column is-one-quarter box has-text-centered">
-        <p class="subtitle is-5">Entrar con</p>
+      <div class="column is-one-quarter has-text-centered">
+        <img src="/static/typelogo.png" alt="tasche" width="90%">
+        <p class="subtitle is-6">Entrar con</p>
         <button class="loginBtn loginBtn--google" @click="loginWithGoogle">Google</button>
         <button class="loginBtn loginBtn--twitter" @click="loginWithTwitter">Twitter</button>
         <button class="loginBtn loginBtn--github" @click="loginWithGithub">Github</button>
@@ -146,7 +147,7 @@ export default {
   background: #24292e;
 }
 .loginBtn--github:before {
-  border-right: #fafbfc 1px solid;
+  border-right: #000 1px solid;
   background: url('https://goo.gl/ScuusH') 6px 6px no-repeat;
 }
 .loginBtn--github:hover,
