@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="columns">
-      <div class="column is-6">
+      <div class="column is-5">
         <div class="column is-four-fifths" v-for="folder in folders">
           <div class="box folder" @click="findSitesByFolder(folder)">
             <article class="media">
@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <div class="column is-6">
+      <div class="column is-7">
         <div class="columns is-centered is-multiline">
           <p class="subtitle is-5" v-if="sites.length <= 0">Selecciona una carpeta</p>
           <div class="column is-half" v-for="site in sites">

@@ -158,7 +158,7 @@ export default {
     },
     removeOld () {
       if (this.selected.folder !== this.getFolder()) {
-        db.ref('sites').child(this.getFolder()).child(this.getKey()).remove()
+        db.ref(`sites/${this.currentUser.uid}`).child(this.getFolder()).child(this.getKey()).remove()
       }
 
       this.cancelModal({})
