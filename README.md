@@ -1,7 +1,5 @@
-<p align="center">
-  <br>
-  <img src="https://raw.githubusercontent.com/nivaldomartinez/tasche/master/static/typelogo.png" alt="Tasche">
-</p>
+![tasche](https://raw.githubusercontent.com/nivaldomartinez/tasche/master/static/typelogo.png)
+# Tasche
 
 > Tasche for save links
 
