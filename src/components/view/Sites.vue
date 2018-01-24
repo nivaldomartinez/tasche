@@ -7,7 +7,9 @@
             <div class="media">
               <div class="media-left">
                 <figure class="image is-48x48">
-                  <img :src="props.img" :alt="props.title" style="background-color:transparent;">
+                  <object :data="props.img" type="image/png">
+                    <img src="/static/images/no-photo.png" style="background-color: transparent"/>
+                  </object>
                 </figure>
               </div>
               <div class="media-content">
