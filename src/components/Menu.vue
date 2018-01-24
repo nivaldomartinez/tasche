@@ -1,6 +1,6 @@
 <template lang="html">
   <section>
-    <nav class="navbar is-info">
+    <nav class="navbar is-info menu-gradient">
       <div class="navbar-brand">
         <router-link active-class="is-active" class="navbar-item" to="/dashboard">
           <figure class="image is-32x32 menu-img">
@@ -79,5 +79,22 @@ export default {
 
   .menu-img {
     margin-right: 10px;
+  }
+
+  .menu-gradient {
+    background-image: linear-gradient(to right, #167df0 0%, #6a11cb 100%);
+  }
+  
+  .navbar.is-info .navbar-end > a.navbar-item:hover,
+  .navbar.is-info .navbar-end > a.navbar-item.is-active,
+  .navbar.is-info .navbar-end .navbar-link:hover,
+  .navbar.is-info .navbar-end .navbar-link.is-active {
+    background-color: #6a11cb;
+    color: white;
+  }
+
+  .navbar.is-info .navbar-item.has-dropdown.is-active .navbar-link {
+    background-color: #6a11cb;
+    color: white;
   }
 </style>

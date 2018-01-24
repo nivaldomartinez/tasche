@@ -1,4 +1,9 @@
 export const defaultMixin = {
+  data () {
+    return {
+      currentUser: JSON.parse(localStorage.getItem('user'))
+    }
+  },
   methods: {
     showNotification (text, isError) {
       this.$toast.open({
