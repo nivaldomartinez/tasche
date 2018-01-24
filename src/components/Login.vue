@@ -2,7 +2,7 @@
   <div class="hero is-fullheight">
     <div class="hero-body columns is-centered">
       <div class="column is-one-quarter has-text-centered">
-        <img src="/static/typelogo.png" alt="tasche" width="90%">
+        <img src="/static/images/typelogo.png" alt="tasche" width="90%">
         <p class="subtitle is-6">Entrar con</p>
         <button class="loginBtn loginBtn--google" @click="onLoginButtonClick('google')">Google</button>
         <button class="loginBtn loginBtn--twitter" @click="onLoginButtonClick('twitter')">Twitter</button>
@@ -107,7 +107,7 @@ export default {
 }
 .loginBtn--twitter:before {
   border-right: #0084b4 1px solid;
-  background: url('/static/twitter-icon.png') 6px 6px no-repeat;
+  background: url('/static/images/twitter-icon.png') 6px 6px no-repeat;
 }
 .loginBtn--twitter:hover,
 .loginBtn--twitter:focus {
@@ -121,7 +121,7 @@ export default {
 }
 .loginBtn--github:before {
   border-right: #000 1px solid;
-  background: url('/static/github-icon.png') 6px 6px no-repeat;
+  background: url('/static/images/github-icon.png') 6px 6px no-repeat;
 }
 .loginBtn--github:hover,
 .loginBtn--github:focus {
@@ -134,7 +134,7 @@ export default {
 }
 .loginBtn--google:before {
   border-right: #BB3F30 1px solid;
-  background: url('/static/google-icon.png') 6px 6px no-repeat;
+  background: url('/static/images/google-icon.png') 6px 6px no-repeat;
 }
 .loginBtn--google:hover,
 .loginBtn--google:focus {

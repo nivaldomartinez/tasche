@@ -21,13 +21,13 @@
             <nav class="level">
               <div class="level-left">
                 <a class="level-item">
-                  <a class="has-text-grey" :href="props.url" target="_blank"><i class="ion-android-open"></i></a>
+                  <a class="has-text-grey" :href="props.url" target="_blank"><i class="fa fa-external-link-square"></i></a>
                 </a>
                 <a class="level-item">
-                  <a class="has-text-grey" @click="$router.push({name: 'editsite', params: {key:site['.key'], folder:site.folder}})"><i class="ion-edit"></i></a>
+                  <a class="has-text-grey" @click="$router.push({name: 'editsite', params: {key:site['.key'], folder:site.folder}})"><i class="fa fa-pencil"></i></a>
                 </a>
                 <a class="level-item">
-                  <a class="has-text-grey" @click="deleteSite(site.folder, site['.key'])"><i class="ion-trash-b"></i></a>
+                  <a class="has-text-grey" @click="deleteSite(site.folder, site['.key'])"><i class="fa fa-trash"></i></a>
                 </a>
               </div>
             </nav>

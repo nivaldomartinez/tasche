@@ -1,6 +1,6 @@
 <template>
   <div class="mainContainer">
-    <div class="columns" v-if="!isMobileDevice">
+    <div class="columns">
       <div class="column is-one-fifth withScroll">
         <folders @selected="onSelectFolder"></folders>
       </div>

@@ -5,7 +5,7 @@
         <article class="media">
           <div class="media-left">
             <figure class="image is-24x24">
-              <img src="/static/folder.png" alt="folder">
+              <img src="/static/images/folder.png" alt="folder">
             </figure>
           </div>
           <div class="media-content">
@@ -17,7 +17,7 @@
           </div>
           <div class="media-right">
             <figure class="image is-16x16">
-              <img src="/static/close.png" alt="folder" @click="deleteFolder(folder['.key'])">
+              <img src="/static/images/close.png" alt="folder" @click="deleteFolder(folder['.key'])">
             </figure>
           </div>
         </article>
