@@ -82,9 +82,11 @@ export default {
   }
 
   .menu-gradient {
+    background-image: -webkit-linear-gradient(left, #167df0 0%, #6a11cb 100%);
+    background-image: -o-linear-gradient(left, #167df0 0%, #6a11cb 100%);
     background-image: linear-gradient(to right, #167df0 0%, #6a11cb 100%);
   }
-  
+
   .navbar.is-info .navbar-end > a.navbar-item:hover,
   .navbar.is-info .navbar-end > a.navbar-item.is-active,
   .navbar.is-info .navbar-end .navbar-link:hover,

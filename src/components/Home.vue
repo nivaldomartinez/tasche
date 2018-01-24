@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import {db} from '@/firebase'
+
 import {defaultMixin} from '@/mixins'
 import Folders from '@/components/view/Folders'
 import Sites from '@/components/view/Sites'
