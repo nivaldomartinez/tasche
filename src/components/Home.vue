@@ -51,10 +51,13 @@ export default {
 
   @media only screen and (max-width: 768px) {
     .withScroll {
-      height: 10vh;
+      height: 15vh;
     }
     #sites.withScroll {
-        height: 75vh;
+        height: 68vh;
+    }
+    .mainContainer {
+      height: 79.6vh;
     }
   }
 
