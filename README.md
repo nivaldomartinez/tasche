@@ -1,6 +1,6 @@
 <p align="center">
   <br>
-  <img src="https://raw.githubusercontent.com/nivaldomartinez/tasche/master/static/typelogo.png" alt="Tasche">
+  <img src="static/images/typelogo.png" alt="Tasche">
 </p>
 
 > Tasche for save links
