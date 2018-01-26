@@ -1,7 +1,4 @@
-<p align="center">
-  <br>
-  <img src="static/images/typelogo.png" alt="Tasche">
-</p>
+![Logo](static/images/typelogo.png)
 
 > Tasche for save links
 
