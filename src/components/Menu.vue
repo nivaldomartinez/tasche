@@ -20,8 +20,8 @@
           <router-link class="navbar-item" :to="{name: 'addsite'}">Agregar</router-link>
         </div>
         <div class="navbar-end">
-          <div class="navbar-item has-dropdown" :class="{'is-active': isActiveDropDown}">
-            <a class="navbar-link" @click="toogleDropDown">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
               <figure class="image is-32x32 menu-img">
                 <img :src="currentUser.photo" alt="Image">
               </figure>
@@ -49,16 +49,12 @@ export default {
   data () {
     return {
       isMenuActive: false,
-      currentUser: JSON.parse(localStorage.getItem('user')),
-      isActiveDropDown: false
+      currentUser: JSON.parse(localStorage.getItem('user'))
     }
   },
   methods: {
     activeMenu () {
       this.isMenuActive = !this.isMenuActive
-    },
-    toogleDropDown () {
-      this.isActiveDropDown = !this.isActiveDropDown
     },
     logout () {
       auth.signOut().then(() => {
@@ -95,7 +91,8 @@ export default {
     color: white;
   }
 
-  .navbar.is-info .navbar-item.has-dropdown.is-active .navbar-link {
+  .navbar.is-info .navbar-item.has-dropdown:hover .navbar-link,
+  .navbar.is-info .navbar-item.has-dropdown.is-active .navbar-link{
     background-color: #6a11cb;
     color: white;
   }

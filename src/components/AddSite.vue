@@ -83,7 +83,7 @@ export default {
         name: null,
         url: null,
         folder: null,
-        currentUser: null
+        timestamp: null
       },
       rules: {
         name: [
@@ -120,6 +120,7 @@ export default {
     saveSite () {
       this.isLoading = true
       this.selected.folder = this.lowerFolder
+      this.selected.timestamp = new Date().getTime()
       const reference = db.ref(`sites/${this.currentUser.uid}/${this.selected.folder}`)
       const key = reference.push().key
       reference.child(key).update(this.selected).then(() => {
@@ -205,5 +206,9 @@ export default {
   top: 0;
   width: 100%;
   background-color: rgba(255, 255, 255, 0.95);
+}
+
+.hidden {
+  display: none;
 }
 </style>

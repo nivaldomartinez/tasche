@@ -4,9 +4,14 @@
       <div class="column is-one-quarter has-text-centered">
         <img src="/static/images/typelogo.png" alt="tasche" width="90%">
         <p class="subtitle is-6">Entrar con</p>
-        <button class="loginBtn loginBtn--google" @click="onLoginButtonClick('google')">Google</button>
-        <button class="loginBtn loginBtn--twitter" @click="onLoginButtonClick('twitter')">Twitter</button>
-        <button class="loginBtn loginBtn--github" @click="onLoginButtonClick('github')">Github</button>
+        <button class="loginBtn loginBtn--google" :disabled="isLoading" @click="onLoginButtonClick('google')">Google</button>
+        <button class="loginBtn loginBtn--twitter" :disabled="isLoading" @click="onLoginButtonClick('twitter')">Twitter</button>
+        <button class="loginBtn loginBtn--github" :disabled="isLoading" @click="onLoginButtonClick('github')">Github</button>
+      </div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-1">
+        <loader color="#868686" v-if="isLoading"></loader>
       </div>
     </div>
   </div>
@@ -16,6 +21,7 @@
 
 import {db, auth, googleProvider, twitterProvider, githubProvider} from '@/firebase'
 import {defaultMixin} from '@/mixins'
+import Loader from '@/components/view/Loader'
 
 export default {
   mixins: [defaultMixin],
@@ -24,12 +30,31 @@ export default {
       this.$router.push('/dashboard')
     }
   },
+  components: {
+    Loader
+  },
+  data () {
+    return {
+      isLoading: false
+    }
+  },
   methods: {
     loginWith (provider) {
       auth.signInWithPopup(provider).then((result) => {
-        this.showNotification(`Entraste como ${result.user.displayName}`, false)
-        db.ref('profile').child(result.user.uid).update(this.prepareUser(result.user)).then(() => {
-          this.$router.push('/dashboard')
+        this.getUserData(result.user.uid, (success, user) => {
+          this.isLoading = true
+          if (success) {
+            localStorage.setItem('user', JSON.stringify(user))
+            this.isLoading = false
+            this.showNotification(`Entraste como ${result.user.displayName}`, false)
+            this.$router.push('/dashboard')
+          } else {
+            db.ref('profile').child(result.user.uid).update(this.prepareUser(result.user)).then(() => {
+              this.isLoading = false
+              this.showNotification(`Te registraste como ${result.user.displayName}`, false)
+              this.$router.push('/dashboard')
+            })
+          }
         })
       }).catch((error) => {
         this.showNotification(error.message, true)
@@ -62,6 +87,12 @@ export default {
       localStorage.setItem('user', JSON.stringify(user))
 
       return user
+    },
+    getUserData (userId, callback) {
+      db.ref('profile').child(userId).once('value', (snapshot) => {
+        // eslint-disable-next-line
+        callback((snapshot.val() !== null), snapshot.val())
+      })
     }
   }
 }

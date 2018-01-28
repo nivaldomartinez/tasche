@@ -7,7 +7,7 @@
             <div class="media">
               <div class="media-left">
                 <figure class="image is-48x48">
-                  <object :data="props.img" type="image/png">
+                  <object :data="props.img" type="image/png" class="image is-48x48">
                     <img src="/static/images/no-photo.png" style="background-color: transparent"/>
                   </object>
                 </figure>
@@ -30,6 +30,11 @@
                 </a>
                 <a class="level-item">
                   <a class="has-text-grey" @click="deleteSite(site.folder, site['.key'])"><i class="fa fa-trash"></i></a>
+                </a>
+              </div>
+              <div class="level-right">
+                <a class="level-item">
+                  <a class="has-text-grey">{{ getFormattedSiteDate(site) }}</a>
                 </a>
               </div>
             </nav>
@@ -67,6 +72,15 @@ export default {
         db.ref(`sites/${this.currentUser.uid}/${folder}/${site}`).remove()
         this.showNotification('Se eliminó correctamente', false)
       })
+    },
+    getFormattedSiteDate (site) {
+      if (site.timestamp === undefined || site.timestamp === '') {
+        return ''
+      }
+      const date = new Date(site.timestamp)
+      let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+      let month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+      return `${day}/${month}/${date.getFullYear()}`
     }
   },
   watch: {
