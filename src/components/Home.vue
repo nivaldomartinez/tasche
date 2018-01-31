@@ -27,7 +27,8 @@ export default {
   },
   data () {
     return {
-      selectedFolder: null
+      selectedFolder: null,
+      menuLoading: false
     }
   },
   methods: {

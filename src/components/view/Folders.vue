@@ -29,12 +29,16 @@
 <script>
 import {db} from '@/firebase'
 import {defaultMixin} from '@/mixins'
+import {EventBus} from '@/eventbus'
 
 export default {
   name: 'folders',
   mixins: [defaultMixin],
   created () {
-    this.$bindAsArray('folders', db.ref(`folders/${this.currentUser.uid}`))
+    EventBus.$emit('loading', true)
+    this.$bindAsArray('folders', db.ref(`folders/${this.currentUser.uid}`), null, () => {
+      EventBus.$emit('loading', false)
+    })
   },
   data () {
     return {

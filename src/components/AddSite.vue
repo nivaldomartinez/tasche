@@ -26,7 +26,10 @@
                       <el-input v-model="selected.name" placeholder="Agrega un nombre" suffix-icon="el-icon-edit" :disabled="isLoading"></el-input>
                     </el-form-item>
                     <el-form-item prop="url">
-                      <el-input placeholder="Agrega una url" suffix-icon="el-icon-share" :disabled="isLoading" v-model="selected.url"></el-input>
+                      <el-input placeholder="Agrega una url" suffix-icon="el-icon-share" :disabled="isLoading" v-model="selected.url" @blur="getLinkPreview"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="description">
+                      <el-input type="textarea" :rows="4" placeholder="Agrega una descripcion al sitio" v-model="selected.description" :disabled="isLoading"></el-input>
                     </el-form-item>
                     <el-form-item prop="folder">
                       <el-select @change="changef" filterable allow-create v-model="selected.folder" placeholder="Carpeta" :disabled="isLoading" style="width: 100%" no-data-text="No hay carpetas creadas">
@@ -83,6 +86,8 @@ export default {
         name: null,
         url: null,
         folder: null,
+        description: '',
+        imageurl: null,
         timestamp: null
       },
       rules: {
@@ -187,6 +192,38 @@ export default {
       if (this.selected.folder !== this.lowerFolder) {
         this.newFolderName = event
       }
+    },
+    getLinkPreview () {
+      const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/
+      if (this.selected.description === '' || this.selected.description === undefined) {
+        if (regex.test(this.selected.url)) {
+          this.isLoading = true
+          this.httpRequest((response) => {
+            const prevue = JSON.parse(response)
+            this.isLoading = false
+            this.selected.description = prevue.description
+            this.selected.imageurl = prevue.images.length > 0 ? prevue.images[0] : ''
+          })
+        }
+      }
+    },
+    httpRequest (success, error) {
+      const http = new XMLHttpRequest()
+      const params = 'url=' + this.selected.url
+      http.open('POST', 'https://linkpreview-api.herokuapp.com', true)
+      http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+      http.onreadystatechange = function () {
+        if (http.readyState === 4) {
+          switch (http.status) {
+            case 200:
+              success(http.responseText)
+              break
+            default:
+              error()
+          }
+        }
+      }
+      http.send(params)
     }
   },
   computed: {

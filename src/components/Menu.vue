@@ -33,8 +33,8 @@
               </a>
             </div>
           </div>
-          <div class="navbar-item">
-
+          <div class="navbar-item" v-if="isLoading">
+            <loader :isMarginLess="true"></loader>
           </div>
         </div>
       </div>
@@ -44,13 +44,25 @@
 
 <script>
 import { auth } from '@/firebase'
+import {EventBus} from '@/eventbus'
+import Loader from '@/components/view/Loader'
+
 export default {
   name: 'element-menu',
+  created () {
+    EventBus.$on('loading', (event) => {
+      this.isLoading = event
+    })
+  },
   data () {
     return {
       isMenuActive: false,
-      currentUser: JSON.parse(localStorage.getItem('user'))
+      currentUser: JSON.parse(localStorage.getItem('user')),
+      isLoading: false
     }
+  },
+  components: {
+    Loader
   },
   methods: {
     activeMenu () {

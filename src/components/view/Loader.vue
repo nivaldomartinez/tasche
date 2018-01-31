@@ -1,6 +1,6 @@
 <template lang="html">
 <div id="loader-container" style="width:100%">
-  <div class="loader" :style="'border: '+fill+' solid '+color+'; border-right-color: transparent;'"></div>
+  <div class="loader" :class="{'is-marginless':isMarginLess}" :style="'border: '+fill+' solid '+color+'; border-right-color: transparent;'"></div>
 </div>
 </template>
 
@@ -15,6 +15,10 @@ export default {
     fill: {
       type: String,
       default: '5px'
+    },
+    isMarginLess: {
+      type: Boolean,
+      default: false
     }
   }
 
