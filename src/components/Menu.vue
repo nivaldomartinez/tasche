@@ -17,7 +17,9 @@
 
       <div id="menu-tasche" :class="{'is-active':isMenuActive}" class="navbar-menu">
         <div class="navbar-start">
-          <router-link class="navbar-item" :to="{name: 'addsite'}">Agregar</router-link>
+          <router-link class="navbar-item" :to="{name: 'addsite'}"
+          v-tooltip.right.notrigger="tooltipMenu">
+          <i class="fa fa-file-alt" style="margin-right:10px" @click="file = ''"></i><p @click="file = ''">Agregar</p></router-link>
         </div>
         <div class="navbar-end">
           <div class="navbar-item has-dropdown is-hoverable">
@@ -45,11 +47,14 @@
 <script>
 import { auth } from '@/firebase'
 import {EventBus} from '@/eventbus'
+import {tutorialMixin} from '@/mixins'
 import Loader from '@/components/view/Loader'
 
 export default {
-  name: 'element-menu',
+  name: 'bulma-menu',
+  mixins: [tutorialMixin],
   created () {
+    this.file = 'menu'
     EventBus.$on('loading', (event) => {
       this.isLoading = event
     })
@@ -70,7 +75,7 @@ export default {
     },
     logout () {
       auth.signOut().then(() => {
-        localStorage.removeItem('user')
+        localStorage.clear()
         this.$router.push('/')
       }).catch((error) => {
         console.log(error)

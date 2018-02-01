@@ -51,6 +51,7 @@ export default {
           } else {
             db.ref('profile').child(result.user.uid).update(this.prepareUser(result.user)).then(() => {
               this.isLoading = false
+              localStorage.setItem('tutorial', 'true')
               this.showNotification(`Te registraste como ${result.user.displayName}`, false)
               this.$router.push('/dashboard')
             })

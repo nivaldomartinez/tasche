@@ -58,6 +58,16 @@ export default {
         this.showNotification('Se eliminó correctamente', false)
       })
     }
+  },
+  watch: {
+    folders (value) {
+      console.log(value, this.folders)
+      if (value.length > 0) {
+        EventBus.$emit('emptyBaul', false)
+      } else {
+        EventBus.$emit('emptyBaul', true)
+      }
+    }
   }
 }
 </script>

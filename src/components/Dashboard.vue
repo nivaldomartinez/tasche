@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <element-menu></element-menu>
+    <bulma-menu></bulma-menu>
     <section class="section">
       <div class="container is-fluid">
         <router-view/>
@@ -11,11 +11,11 @@
 
 <script>
 
-import ElementMenu from '@/components/Menu'
+import BulmaMenu from '@/components/Menu'
 export default {
   name: 'dashboard',
   components: {
-    ElementMenu
+    BulmaMenu
   }
 }
 </script>

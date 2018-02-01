@@ -1,5 +1,13 @@
 <template>
   <div class="mainContainer">
+    <div class="columns is-centered" v-if="isBaulEmpty && !isLoading">
+      <div class="column is-half">
+        <section class="section">
+          <h4 class="subtitle is-4 has-text-grey has-text-centered">No tienes nada en tu baúl, empieza a agregar sitios.</h4>
+          <h4 class="subtitle is-4 has-text-grey has-text-centered">Haz click en el boton <strong>Agregar</strong></h4>
+        </section>
+      </div>
+    </div>
     <div class="columns">
       <div class="column is-one-fifth withScroll">
         <folders @selected="onSelectFolder"></folders>
@@ -17,6 +25,7 @@
 import {defaultMixin} from '@/mixins'
 import Folders from '@/components/view/Folders'
 import Sites from '@/components/view/Sites'
+import {EventBus} from '@/eventbus'
 
 export default {
   name: 'home',
@@ -25,10 +34,21 @@ export default {
     Folders,
     Sites
   },
+  created () {
+    EventBus.$on('emptyBaul', (isEmpty) => {
+      this.isBaulEmpty = isEmpty
+    })
+
+    EventBus.$on('loading', (event) => {
+      this.isLoading = event
+    })
+  },
   data () {
     return {
       selectedFolder: null,
-      menuLoading: false
+      menuLoading: false,
+      isBaulEmpty: false,
+      isLoading: false
     }
   },
   methods: {

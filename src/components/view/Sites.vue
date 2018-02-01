@@ -6,9 +6,7 @@
           <div class="media">
             <div class="media-left">
               <figure class="image is-48x48">
-                <object :data="site.imageurl" type="image/png" class="image is-48x48">
-                  <img src="/static/images/no-photo.png" style="background-color: transparent"/>
-                </object>
+                <progressive-img :src="site.imageurl" fallback="/static/images/no-photo.png"/>
               </figure>
             </div>
             <div class="media-content">
@@ -22,13 +20,13 @@
           <nav class="level">
             <div class="level-left">
               <a class="level-item">
-                <a class="has-text-grey" :href="site.url" target="_blank"><i class="fa fa-external-link-square"></i></a>
+                <a class="has-text-grey" :href="site.url" target="_blank"><i class="fas fa-external-link-square-alt"></i></a>
               </a>
               <a class="level-item">
-                <a class="has-text-grey" @click="$router.push({name: 'editsite', params: {key:site['.key'], folder:site.folder}})"><i class="fa fa-pencil"></i></a>
+                <a class="has-text-grey" @click="$router.push({name: 'editsite', params: {key:site['.key'], folder:site.folder}})"><i class="fas fa-edit"></i></a>
               </a>
               <a class="level-item">
-                <a class="has-text-grey" @click="deleteSite(site.folder, site['.key'])"><i class="fa fa-trash"></i></a>
+                <a class="has-text-grey" @click="deleteSite(site.folder, site['.key'])"><i class="fas fa-trash"></i></a>
               </a>
             </div>
             <div class="level-right">

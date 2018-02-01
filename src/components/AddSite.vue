@@ -22,17 +22,17 @@
               <div class="columns is-centered">
                 <div class="column is-4">
                   <el-form ref="siteform" :model="selected" :rules="rules">
-                    <el-form-item prop="name">
-                      <el-input v-model="selected.name" placeholder="Agrega un nombre" suffix-icon="el-icon-edit" :disabled="isLoading"></el-input>
+                    <el-form-item prop="name" v-tooltip.right.notrigger="tooltipTitleFile">
+                      <el-input v-model="selected.name" placeholder="Agrega un nombre" suffix-icon="el-icon-edit" @focus="file = 'title'" :disabled="isLoading"></el-input>
                     </el-form-item>
-                    <el-form-item prop="url">
-                      <el-input placeholder="Agrega una url" suffix-icon="el-icon-share" :disabled="isLoading" v-model="selected.url" @blur="getLinkPreview"></el-input>
+                    <el-form-item prop="url" v-tooltip.right.notrigger="tooltipUrlFile">
+                      <el-input placeholder="Agrega una url" suffix-icon="el-icon-share" :disabled="isLoading" v-model="selected.url" @focus="file = 'url'" @blur="getLinkPreview"></el-input>
                     </el-form-item>
-                    <el-form-item prop="description">
-                      <el-input type="textarea" :rows="4" placeholder="Agrega una descripcion al sitio" v-model="selected.description" :disabled="isLoading"></el-input>
+                    <el-form-item prop="description" v-tooltip.right.notrigger="tooltipDescFile">
+                      <el-input type="textarea" :rows="4" placeholder="Agrega una descripcion al sitio" v-model="selected.description" @focus="file = 'desc'" :disabled="isLoading"></el-input>
                     </el-form-item>
-                    <el-form-item prop="folder">
-                      <el-select @change="changef" filterable allow-create v-model="selected.folder" placeholder="Carpeta" :disabled="isLoading" style="width: 100%" no-data-text="No hay carpetas creadas">
+                    <el-form-item prop="folder" v-tooltip.right.notrigger="tooltipFolderFile">
+                      <el-select @change="changef" filterable allow-create v-model="selected.folder" placeholder="Carpeta" @focus="file = 'folder'" :disabled="isLoading" style="width: 100%" no-data-text="No hay carpetas creadas">
                         <el-option v-for="folder in folders" :key="folder['.key']" :label="folder['.value']" :value="folder['.key']">
                         </el-option>
                       </el-select>
@@ -61,11 +61,11 @@
 <script>
 
 import {db} from '@/firebase'
-import {defaultMixin} from '@/mixins'
+import {defaultMixin, tutorialMixin} from '@/mixins'
 
 export default {
   name: 'add',
-  mixins: [defaultMixin],
+  mixins: [defaultMixin, tutorialMixin],
   created () {
     this.currentUser = JSON.parse(localStorage.getItem('user'))
     this.$bindAsArray('folders', db.ref(`folders/${this.currentUser.uid}`))
@@ -129,6 +129,7 @@ export default {
       const reference = db.ref(`sites/${this.currentUser.uid}/${this.selected.folder}`)
       const key = reference.push().key
       reference.child(key).update(this.selected).then(() => {
+        localStorage.removeItem('tutorial')
         this.isLoading = false
         this.saveFolder()
         this.showNotification('Sitio agregado correctamente', false)
@@ -202,7 +203,7 @@ export default {
             const prevue = JSON.parse(response)
             this.isLoading = false
             this.selected.description = prevue.description
-            this.selected.imageurl = prevue.images.length > 0 ? prevue.images[0] : ''
+            this.selected.imageurl = prevue.images.length > 0 ? prevue.images[0] : this.getRandomImage(prevue.title)
           })
         }
       }
@@ -224,6 +225,13 @@ export default {
         }
       }
       http.send(params)
+    },
+    getRandomImage (name) {
+      let char = name
+      if (name === '' || name === undefined) {
+        char = 'Tasche'
+      }
+      return 'https://dummyimage.com/48x48/167df0/ffffff.png&text=' + char.charAt(0)
     }
   },
   computed: {
