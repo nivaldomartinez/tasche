@@ -5,7 +5,7 @@ const config = {
   authDomain: 'tasche-web.firebaseapp.com',
   databaseURL: 'https://tasche-web.firebaseio.com',
   projectId: 'tasche-web',
-  storageBucket: '',
+  storageBucket: 'tasche-web.appspot.com',
   messagingSenderId: '542476823252'
 }
 
@@ -13,6 +13,7 @@ Firebase.initializeApp(config)
 
 export const db = Firebase.database()
 export const auth = Firebase.auth()
+export const storage = Firebase.storage()
 export const googleProvider = new Firebase.auth.GoogleAuthProvider()
 export const twitterProvider = new Firebase.auth.TwitterAuthProvider()
 export const githubProvider = new Firebase.auth.GithubAuthProvider()

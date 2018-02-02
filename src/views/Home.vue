@@ -23,8 +23,8 @@
 <script>
 
 import {defaultMixin} from '@/mixins'
-import Folders from '@/components/view/Folders'
-import Sites from '@/components/view/Sites'
+import Folders from '@/components/Folders'
+import Sites from '@/components/Sites'
 import {EventBus} from '@/eventbus'
 
 export default {

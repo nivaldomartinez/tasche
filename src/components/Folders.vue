@@ -61,7 +61,6 @@ export default {
   },
   watch: {
     folders (value) {
-      console.log(value, this.folders)
       if (value.length > 0) {
         EventBus.$emit('emptyBaul', false)
       } else {

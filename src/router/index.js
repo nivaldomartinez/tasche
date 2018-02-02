@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Dashboard from '@/components/Dashboard'
-import Home from '@/components/Home'
-import AddSite from '@/components/AddSite'
-import Login from '@/components/Login'
+import Dashboard from '@/views/Dashboard'
+import Home from '@/views/Home'
+import AddSite from '@/views/AddSite'
+import Login from '@/views/Login'
+import Profile from '@/views/Profile'
 
-const NotFound = () => import('@/components/NotFound')
+const NotFound = () => import('@/views/NotFound')
 
 Vue.use(Router)
 
@@ -41,6 +42,12 @@ const router = new Router({
               path: 'site/add',
               component: AddSite,
               name: 'addsite',
+              meta: { requiresAuth: true }
+            },
+            {
+              path: 'profile',
+              component: Profile,
+              name: 'profile',
               meta: { requiresAuth: true }
             }
           ]

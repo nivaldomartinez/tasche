@@ -1,71 +1,69 @@
 <template lang="html">
-  <div>
-    <transition name="fade">
-      <div class="modal" v-if="modalActive">
-        <section class="hero is-fullheight section">
-          <div class="hero-header">
-            <div class="level">
-              <div class="level-item"></div>
-              <div class="level-item">
-                <h1 class="title is-12 has-text-info" v-if="getKey() === undefined">Nuevo Sitio</h1>
-                <h1 class="title is-12 has-text-info" v-if="getKey() !== undefined">Editar Sitio</h1>
-              </div>
-              <div class="level-item">
-                <a href="javascript:;" @click="cancelModal">
-                  <i class="has-text-grey-light subtitle el-icon-close"></i>
-                </a>
-              </div>
-            </div>
+  <fullheight-modal :show="modalActive">
+    <section class="hero is-fullheight section">
+      <div class="hero-header">
+        <div class="level">
+          <div class="level-item"></div>
+          <div class="level-item">
+            <h1 class="title is-12 has-text-info" v-if="getKey() === undefined">Nuevo Sitio</h1>
+            <h1 class="title is-12 has-text-info" v-if="getKey() !== undefined">Editar Sitio</h1>
           </div>
-          <div class="hero-body">
-            <div class="container is-widescreen has-text-centered">
-              <div class="columns is-centered">
-                <div class="column is-4">
-                  <el-form ref="siteform" :model="selected" :rules="rules">
-                    <el-form-item prop="name" v-tooltip.right.notrigger="tooltipTitleFile">
-                      <el-input v-model="selected.name" placeholder="Agrega un nombre" suffix-icon="el-icon-edit" @focus="file = 'title'" :disabled="isLoading"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="url" v-tooltip.right.notrigger="tooltipUrlFile">
-                      <el-input placeholder="Agrega una url" suffix-icon="el-icon-share" :disabled="isLoading" v-model="selected.url" @focus="file = 'url'" @blur="getLinkPreview"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="description" v-tooltip.right.notrigger="tooltipDescFile">
-                      <el-input type="textarea" :rows="4" placeholder="Agrega una descripcion al sitio" v-model="selected.description" @focus="file = 'desc'" :disabled="isLoading"></el-input>
-                    </el-form-item>
-                    <el-form-item prop="folder" v-tooltip.right.notrigger="tooltipFolderFile">
-                      <el-select @change="changef" filterable allow-create v-model="selected.folder" placeholder="Carpeta" @focus="file = 'folder'" :disabled="isLoading" style="width: 100%" no-data-text="No hay carpetas creadas">
-                        <el-option v-for="folder in folders" :key="folder['.key']" :label="folder['.value']" :value="folder['.key']">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                    <el-form-item>
-                      <div class="field is-grouped">
-                        <p class="control">
-                          <a class="button is-info" :class="{'is-loading':isLoading}" @click="onClickSaveButton">Guardar</a>
-                        </p>
-                        <p class="control">
-                          <a class="button" :disabled="isLoading" @click="cancelModal">Cancelar</a>
-                        </p>
-                      </div>
-                    </el-form-item>
-                  </el-form>
-                </div>
-              </div>
-            </div>
+          <div class="level-item">
+            <a href="javascript:;" @click="cancelModal">
+              <i class="has-text-grey-light subtitle el-icon-close"></i>
+            </a>
           </div>
-        </section>
+        </div>
       </div>
-    </transition>
-  </div>
+      <div class="hero-body">
+        <div class="container is-widescreen has-text-centered">
+          <div class="columns is-centered">
+            <div class="column is-4">
+              <el-form ref="siteform" :model="selected" :rules="rules">
+                <el-form-item prop="name" v-tooltip.right.notrigger="tooltipTitleFile">
+                  <el-input v-model="selected.name" placeholder="Agrega un nombre" suffix-icon="el-icon-edit" @focus="file = 'title'" :disabled="isLoading"></el-input>
+                </el-form-item>
+                <el-form-item prop="url" v-tooltip.right.notrigger="tooltipUrlFile">
+                  <el-input placeholder="Agrega una url" suffix-icon="el-icon-share" :disabled="isLoading" v-model="selected.url" @focus="file = 'url'" @blur="getLinkPreview"></el-input>
+                </el-form-item>
+                <el-form-item prop="description" v-tooltip.right.notrigger="tooltipDescFile">
+                  <el-input type="textarea" :rows="4" placeholder="Agrega una descripcion al sitio" v-model="selected.description" @focus="file = 'desc'" :disabled="isLoading"></el-input>
+                </el-form-item>
+                <el-form-item prop="folder" v-tooltip.right.notrigger="tooltipFolderFile">
+                  <el-select @change="changef" filterable allow-create v-model="selected.folder" placeholder="Carpeta" @focus="file = 'folder'" :disabled="isLoading" style="width: 100%" no-data-text="No hay carpetas creadas">
+                    <el-option v-for="folder in folders" :key="folder['.key']" :label="folder['.value']" :value="folder['.key']">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item>
+                  <div class="field is-grouped">
+                    <p class="control">
+                      <a class="button is-info" :class="{'is-loading':isLoading}" @click="onClickSaveButton">Guardar</a>
+                    </p>
+                    <p class="control">
+                      <a class="button" :disabled="isLoading" @click="cancelModal">Cancelar</a>
+                    </p>
+                  </div>
+                </el-form-item>
+              </el-form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </fullheight-modal>
 </template>
 
 <script>
 
 import {db} from '@/firebase'
 import {defaultMixin, tutorialMixin} from '@/mixins'
+import FullheightModal from '@/components/FullheightModal'
 
 export default {
   name: 'add',
   mixins: [defaultMixin, tutorialMixin],
+  components: { FullheightModal },
   created () {
     this.currentUser = JSON.parse(localStorage.getItem('user'))
     this.$bindAsArray('folders', db.ref(`folders/${this.currentUser.uid}`))
@@ -241,19 +239,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.modal {
-  display: block;
-  height: 100%;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.95);
-}
-
-.hidden {
-  display: none;
-}
-</style>

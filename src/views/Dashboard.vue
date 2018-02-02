@@ -11,7 +11,7 @@
 
 <script>
 
-import BulmaMenu from '@/components/Menu'
+import BulmaMenu from '@/views/Menu'
 export default {
   name: 'dashboard',
   components: {

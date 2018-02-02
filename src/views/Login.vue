@@ -21,7 +21,7 @@
 
 import {db, auth, googleProvider, twitterProvider, githubProvider} from '@/firebase'
 import {defaultMixin} from '@/mixins'
-import Loader from '@/components/view/Loader'
+import Loader from '@/components/Loader'
 
 export default {
   mixins: [defaultMixin],
@@ -84,8 +84,6 @@ export default {
       user.photo = dbuser.photoURL
       user.phone = dbuser.phoneNumber
       user.uid = dbuser.uid
-
-      localStorage.setItem('user', JSON.stringify(user))
 
       return user
     },

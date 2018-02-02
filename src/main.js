@@ -15,7 +15,7 @@ import 'buefy/lib/buefy.css'
 // Tooltip
 import 'vue-directive-tooltip/css/index.css'
 Vue.use(Tooltip)
-
+// buefy
 Vue.use(Buefy)
 Vue.use(VueFire)
 // element

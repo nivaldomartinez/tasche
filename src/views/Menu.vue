@@ -3,8 +3,8 @@
     <nav class="navbar is-info menu-gradient">
       <div class="navbar-brand">
         <router-link active-class="is-active" class="navbar-item" to="/dashboard">
-          <figure class="image is-32x32 menu-img">
-            <img src="/static/images/logo-white.png" alt="Image">
+          <figure class="image is-32x32 logo">
+            <img src="/static/images/logo-white.png" alt="Tasche">
           </figure>
           <h1><strong>Tasche</strong></h1>
         </router-link>
@@ -24,12 +24,13 @@
         <div class="navbar-end">
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
-              <figure class="image is-32x32 menu-img">
-                <img :src="currentUser.photo" alt="Image">
-              </figure>
+              <div class="image is-32x32 profile-photo" :style="{ backgroundImage: `url('${currentUser.photo}')` }"></div>
               {{ currentUser.name }}
             </a>
             <div class="navbar-dropdown">
+              <router-link :to="{name: 'profile'}" class="navbar-item">
+                Perfil
+              </router-link>
               <a class="navbar-item" @click="logout">
                 Cerrar Sesión
               </a>
@@ -48,7 +49,7 @@
 import { auth } from '@/firebase'
 import {EventBus} from '@/eventbus'
 import {tutorialMixin} from '@/mixins'
-import Loader from '@/components/view/Loader'
+import Loader from '@/components/Loader'
 
 export default {
   name: 'bulma-menu',
@@ -57,6 +58,9 @@ export default {
     this.file = 'menu'
     EventBus.$on('loading', (event) => {
       this.isLoading = event
+    })
+    EventBus.$on('userChanged', (user) => {
+      this.currentUser = user
     })
   },
   data () {
@@ -86,12 +90,16 @@ export default {
 </script>
 
 <style scoped>
-  .menu-img img{
-    border-radius: 16px;
+  .logo {
+    margin-right: 10px;
   }
 
-  .menu-img {
+  .profile-photo {
+    background-color: #F1F1F1;
     margin-right: 10px;
+    border-radius: 50%;
+    background-size: 32px 32px;
+    background-position: center;
   }
 
   .menu-gradient {
