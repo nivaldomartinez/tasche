@@ -70,8 +70,8 @@ export default {
     window.addEventListener('keyup', this.cancelModal)
   },
   mounted () {
-    if (this.getKey() !== undefined && this.getFolder() !== undefined) {
-      this.$bindAsObject('selected', db.ref(`sites/${this.currentUser.uid}/${this.getFolder()}`).child(this.getKey()), null, () => {
+    if (this.getKey() !== undefined) {
+      this.$bindAsObject('selected', db.ref(`sites/${this.currentUser.uid}`).child(this.getKey()), null, () => {
         this.modalActive = true
       })
     } else {
@@ -124,7 +124,7 @@ export default {
       this.isLoading = true
       this.selected.folder = this.lowerFolder
       this.selected.timestamp = new Date().getTime()
-      const reference = db.ref(`sites/${this.currentUser.uid}/${this.selected.folder}`)
+      const reference = db.ref(`sites/${this.currentUser.uid}`)
       const key = reference.push().key
       reference.child(key).update(this.selected).then(() => {
         localStorage.removeItem('tutorial')
@@ -140,13 +140,13 @@ export default {
     editSite () {
       this.isLoading = true
       this.selected.folder = this.lowerFolder
-      const reference = db.ref(`sites/${this.currentUser.uid}/${this.selected.folder}`)
+      const reference = db.ref(`sites/${this.currentUser.uid}`)
       delete this.selected['.key']
       reference.child(this.getKey()).update(this.selected).then(() => {
         this.isLoading = false
         this.saveFolder()
         this.showNotification('Sitio editado correctamente', false)
-        this.removeOld()
+        this.$router.push('/dashboard')
       }).catch(() => {
         this.isLoading = false
         this.showNotification('Ocurrio un error al guardar', true)
@@ -161,18 +161,8 @@ export default {
         this.$router.push('/dashboard')
       }
     },
-    removeOld () {
-      if (this.selected.folder !== this.getFolder()) {
-        db.ref(`sites/${this.currentUser.uid}`).child(this.getFolder()).child(this.getKey()).remove()
-      }
-
-      this.cancelModal({})
-    },
     getKey () {
       return this.$route.params.key
-    },
-    getFolder () {
-      return this.$route.params.folder
     },
     validateUrl (rule, value, callback) {
       const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/

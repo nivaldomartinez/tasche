@@ -94,6 +94,10 @@ export default {
     margin-right: 10px;
   }
 
+  .navbar {
+    z-index: 3;
+  }
+
   .profile-photo {
     background-color: #F1F1F1;
     margin-right: 10px;

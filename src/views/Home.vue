@@ -9,11 +9,15 @@
       </div>
     </div>
     <div class="columns">
-      <div class="column is-one-fifth withScroll">
+      <div class="column sidebar is-2 withScroll">
         <folders @selected="onSelectFolder"></folders>
       </div>
       <div class="column withScroll" id="sites">
-        <sites :folder="selectedFolder"></sites>
+        <section class="section">
+          <div class="container is-fluid">
+            <sites :folder="selectedFolder"></sites>
+          </div>
+        </section>
       </div>
     </div>
     <router-view></router-view>
@@ -63,22 +67,26 @@ export default {
 
   .withScroll {
     overflow-y: scroll;
-    height: 86vh;
+    height: 95vh;
+  }
+
+  .columns {
+    margin: 0px;
   }
 
   .mainContainer {
-    height: 85vh;
+    height: 95vh;
   }
 
   @media only screen and (max-width: 768px) {
     .withScroll {
-      height: 15vh;
+      height: 23vh;
     }
     #sites.withScroll {
-        height: 68vh;
+        height: 67vh;
     }
     .mainContainer {
-      height: 79.6vh;
+      height: 95vh;
     }
   }
 
@@ -95,5 +103,11 @@ export default {
   div::-webkit-scrollbar-thumb {
       border-radius: 0px;
       -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+  }
+
+  .sidebar {
+    background-color: #262F34;
+    padding: 30px;
+    padding-top: 55px;
   }
 </style>

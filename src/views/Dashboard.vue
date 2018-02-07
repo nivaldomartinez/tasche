@@ -1,11 +1,7 @@
 <template lang="html">
   <div>
     <bulma-menu></bulma-menu>
-    <section class="section">
-      <div class="container is-fluid">
-        <router-view/>
-      </div>
-    </section>
+    <router-view/>
   </div>
 </template>
 

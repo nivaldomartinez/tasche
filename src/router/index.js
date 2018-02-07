@@ -33,7 +33,7 @@ const router = new Router({
           meta: { requiresAuth: true },
           children: [
             {
-              path: ':folder/edit/:key',
+              path: 'edit/:key',
               component: AddSite,
               name: 'editsite',
               meta: { requiresAuth: true }

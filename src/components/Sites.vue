@@ -59,13 +59,19 @@ export default {
   methods: {
     findSites () {
       EventBus.$emit('loading', true)
-      this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}/${this.folder['.key']}`), null, () => {
-        EventBus.$emit('loading', false)
-      })
+      if (this.folder['.key'] === 'all') {
+        this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}`), null, () => {
+          EventBus.$emit('loading', false)
+        })
+      } else {
+        this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}`).orderByChild('folder').equalTo(this.folder['.key']), null, () => {
+          EventBus.$emit('loading', false)
+        })
+      }
     },
     deleteSite (folder, site) {
       this.showDeleteConfirmation('¿Seguro que quieres eliminar el sitio?', 'is-bottom-right', () => {
-        db.ref(`sites/${this.currentUser.uid}/${folder}/${site}`).remove()
+        db.ref(`sites/${this.currentUser.uid}/${site}`).remove()
         this.showNotification('Se eliminó correctamente', false)
       })
     },

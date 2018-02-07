@@ -1,27 +1,46 @@
 <template lang="html">
   <div class="columns is-multiline">
-    <div class="column is-9" v-for="folder in folders" v-if="folders">
-      <div class="folder" @click="onClickFolder(folder)">
-        <article class="media">
-          <div class="media-left">
-            <figure class="image is-24x24">
-              <img src="/static/images/folder.png" alt="folder">
-            </figure>
+    <div class="column is-12 folder" @click="onClickFolder(item)" v-for="item in menuItems" v-if="folders" :class="{'is-active':item['.key'] === selectedFolder['.key']}">
+      <article class="media">
+        <div class="media-left">
+          <i class="fa" :class="[
+            item['.key'] === selectedFolder['.key'] ? 'has-text-white' : 'has-text-grey-light',
+            item.icon]"></i>
+        </div>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong :class="[item['.key'] === selectedFolder['.key'] ? 'has-text-white' : 'has-text-grey-light']">{{item.name}}</strong>
+            </p>
           </div>
-          <div class="media-content">
-            <div class="content">
-              <p>
-                <strong :class="{'has-text-info': folder['.key'] === selectedFolder['.key']}">{{folder['.value']}}</strong>
-              </p>
-            </div>
+        </div>
+      </article>
+    </div>
+    <h6 class="subtitle is-6 has-text-grey-light" style="margin-top: 20px; margin-bottom: 20px">Carpetas</h6>
+    <div class="column is-12 folder"  @click="onClickFolder(folder)" v-for="folder in folders" v-if="folders" :class="{'is-active':folder['.key'] === selectedFolder['.key']}">
+      <article class="media">
+        <div class="media-left">
+          <i class="fa fa-folder" :class="{
+            'has-text-white':folder['.key'] === selectedFolder['.key'],
+            'has-text-grey-light':folder['.key'] !== selectedFolder['.key']
+            }"></i>
+        </div>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              <strong :class="{
+                'has-text-white':folder['.key'] === selectedFolder['.key'],
+                'has-text-grey-light':folder['.key'] !== selectedFolder['.key']
+                }">{{folder['.value']}}</strong>
+            </p>
           </div>
-          <div class="media-right">
-            <figure class="image is-16x16">
-              <img src="/static/images/close.png" alt="folder" @click="deleteFolder(folder['.key'])">
-            </figure>
-          </div>
-        </article>
-      </div>
+        </div>
+        <div class="media-right">
+          <figure class="image is-16x16">
+            <img src="/static/images/close.png" alt="folder" @click="deleteFolder(folder['.key'])">
+          </figure>
+        </div>
+      </article>
     </div>
   </div>
 </template>
@@ -43,7 +62,9 @@ export default {
   data () {
     return {
       folders: null,
-      selectedFolder: {}
+      selectedFolder: {},
+      menuItems: [{name: 'Todos', '.key': 'all', icon: 'fa-paperclip'}, {name: 'Favoritos', '.key': 'starred', icon: 'fa-star'}],
+      deleteSites: []
     }
   },
   methods: {
@@ -53,9 +74,15 @@ export default {
     },
     deleteFolder (folder) {
       this.showDeleteConfirmation('¿Seguro que quieres eliminar la carpeta? Se eliminarán todos los sitios de la carpeta', 'is-bottom-left', () => {
-        db.ref(`sites/${this.currentUser.uid}/${folder}`).remove()
-        db.ref(`folders/${this.currentUser.uid}/${folder}`).remove()
-        this.showNotification('Se eliminó correctamente', false)
+        this.$bindAsArray('deleteSites', db.ref(`sites/${this.currentUser.uid}`).orderByChild('folder').equalTo(folder), null, () => {
+          EventBus.$emit('loading', true)
+          this.deleteSites.forEach((site) => {
+            db.ref(`sites/${this.currentUser.uid}/${site['.key']}`).remove()
+          })
+          db.ref(`folders/${this.currentUser.uid}/${folder}`).remove()
+          this.showNotification('Se eliminó correctamente', false)
+          EventBus.$emit('loading', false)
+        })
       })
     }
   },
@@ -71,8 +98,20 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
   .folder {
     cursor: pointer;
+  }
+
+  .folder.is-active {
+    background-color: rgba(22, 125, 240, 1);
+  }
+
+  .folder.is-active:hover {
+    background-color: rgba(22, 125, 240, 1);
+  }
+
+  .folder:hover {
+    background-color: rgba(22, 125, 240, 0.5);
   }
 </style>
