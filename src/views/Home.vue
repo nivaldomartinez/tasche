@@ -4,7 +4,7 @@
       <div class="column is-half">
         <section class="section">
           <h4 class="subtitle is-4 has-text-grey has-text-centered">No tienes nada en tu baúl, empieza a agregar sitios.</h4>
-          <h4 class="subtitle is-4 has-text-grey has-text-centered">Haz click en el boton <strong>Agregar</strong></h4>
+          <h4 class="subtitle is-4 has-text-grey has-text-centered">Haz click en el botón <strong>Agregar</strong></h4>
         </section>
       </div>
     </div>

@@ -1,8 +1,11 @@
 <template lang="html">
   <div class="columns is-centered is-multiline">
-    <div class="column is-12" v-if="sites.length === 0">
+    <div class="column is-12" v-if="sites.length === 0 && folder['.key'] === 'starred'">
       <h4 class="subtitle is-4 has-text-grey has-text-centered">No has marcado ningún sitio como favorito.</h4>
-      <h4 class="subtitle is-4 has-text-grey has-text-centered">Haz click en el boton <strong><i class="fas fa-star"></i></strong> del sitio para marcarlo como favorito.</h4>
+      <h4 class="subtitle is-4 has-text-grey has-text-centered">Haz click en el botón <strong><i class="fas fa-star"></i></strong> del sitio para marcarlo como favorito.</h4>
+    </div>
+    <div class="column is-12" v-if="sites.length === 0 && folder['.key'] !== 'starred' && folder['.key'] !== 'all'">
+      <h4 class="subtitle is-4 has-text-grey has-text-centered">Carpeta vacía.</h4>
     </div>
     <div class="column is-one-third" v-for="site in sites">
       <div class="card">
