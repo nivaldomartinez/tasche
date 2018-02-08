@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="columns is-multiline" v-if="folders.length !== 0">
+  <div class="columns is-multiline">
     <div class="column is-12 folder" @click="onClickFolder(item)" v-for="item in menuItems" :class="{'is-active':item['.key'] === selectedFolder['.key']}">
       <article class="media">
         <div class="media-left">
@@ -14,9 +14,14 @@
             </p>
           </div>
         </div>
+        <div class="media-right" v-if="item['.key'] === 'trash'">
+          <figure class="image is-16x16">
+            <img src="/static/images/close.png" alt="folder" @click="emptyTrash">
+          </figure>
+        </div>
       </article>
     </div>
-    <h6 class="subtitle is-6 has-text-grey-light" style="margin-top: 20px; margin-bottom: 20px">Carpetas</h6>
+    <div class="column is-8"><h6 class="subtitle is-6 has-text-grey-light" style="margin-top: 20px; margin-bottom: 20px">{{folders.length}} Carpeta(s)</h6></div>
     <div class="column is-12 folder"  @click="onClickFolder(folder)" v-for="folder in folders" :class="{'is-active':folder['.key'] === selectedFolder['.key']}">
       <article class="media">
         <div class="media-left">
@@ -63,7 +68,7 @@ export default {
     return {
       folders: null,
       selectedFolder: {},
-      menuItems: [{name: 'Todos', '.key': 'all', icon: 'fa-paperclip'}, {name: 'Favoritos', '.key': 'starred', icon: 'fa-star'}],
+      menuItems: [{name: 'Todos', '.key': 'all', icon: 'fa-paperclip'}, {name: 'Favoritos', '.key': 'starred', icon: 'fa-star'}, {name: 'Papelera', '.key': 'trash', icon: 'fa-trash'}],
       deleteSites: []
     }
   },
@@ -74,15 +79,13 @@ export default {
     },
     deleteFolder (folder) {
       this.showDeleteConfirmation('¿Seguro que quieres eliminar la carpeta? Se eliminarán todos los sitios de la carpeta', 'is-bottom-left', () => {
-        this.$bindAsArray('deleteSites', db.ref(`sites/${this.currentUser.uid}`).orderByChild('folder').equalTo(folder), null, () => {
-          EventBus.$emit('loading', true)
-          this.deleteSites.forEach((site) => {
-            db.ref(`sites/${this.currentUser.uid}/${site['.key']}`).remove()
-          })
-          db.ref(`folders/${this.currentUser.uid}/${folder}`).remove()
-          this.showNotification('Se eliminó correctamente', false)
-          EventBus.$emit('loading', false)
-        })
+        this.$emit('selected', null)
+        db.ref(`folders/${this.currentUser.uid}/${folder}`).remove()
+      })
+    },
+    emptyTrash () {
+      this.showDeleteConfirmation('¿Seguro que quieres vacíar la papelera?', 'is-bottom-left', () => {
+        db.ref(`trashes/${this.currentUser.uid}`).remove()
       })
     }
   },

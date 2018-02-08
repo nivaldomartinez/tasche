@@ -1,10 +1,13 @@
 <template lang="html">
-  <div class="columns is-centered is-multiline">
-    <div class="column is-12" v-if="sites.length === 0 && folder['.key'] === 'starred'">
+  <div class="columns is-centered is-multiline" v-if="folder && !isBaulEmpty">
+    <div class="column is-12" v-if="sites.length === 0 && folder['.key'] === 'starred' && !isBaulEmpty">
       <h4 class="subtitle is-4 has-text-grey has-text-centered">No has marcado ningún sitio como favorito.</h4>
       <h4 class="subtitle is-4 has-text-grey has-text-centered">Haz click en el botón <strong><i class="fas fa-star"></i></strong> del sitio para marcarlo como favorito.</h4>
     </div>
-    <div class="column is-12" v-if="sites.length === 0 && folder['.key'] !== 'starred' && folder['.key'] !== 'all'">
+    <div class="column is-12" v-if="sites.length === 0 && folder['.key'] === 'trash' && !isBaulEmpty">
+      <h4 class="subtitle is-4 has-text-grey has-text-centered">Papelera vacía.</h4>
+    </div>
+    <div class="column is-12" v-if="sites.length === 0 && folder['.key'] !== 'starred' && folder['.key'] !== 'all' && folder['.key'] !== 'trash'">
       <h4 class="subtitle is-4 has-text-grey has-text-centered">Carpeta vacía.</h4>
     </div>
     <div class="column is-one-third" v-for="site in sites">
@@ -24,7 +27,7 @@
           <div class="content">
             {{site.description}}
           </div>
-          <nav class="level">
+          <nav class="level" v-if="folder['.key'] !== 'trash'">
             <div class="level-left">
               <a class="level-item">
                 <a class="has-text-grey" :href="site.url" target="_blank"><i class="fas fa-external-link-square-alt"></i></a>
@@ -41,7 +44,14 @@
                 <a class="has-text-grey">{{ getFormattedSiteDate(site) }}</a>
               </a>
               <a class="level-item">
-                <a class="has-text-grey" @click="deleteSite(site.folder, site['.key'])"><i class="fas fa-trash"></i></a>
+                <a class="has-text-grey" @click="deleteSite(site)"><i class="fas fa-trash"></i></a>
+              </a>
+            </div>
+          </nav>
+          <nav class="level" v-if="folder['.key'] === 'trash'">
+            <div class="level-left">
+              <a class="level-item">
+                <a class="has-text-grey" @click="rescueSite(site)"><i class="fas fa-save"></i></a>
               </a>
             </div>
           </nav>
@@ -59,7 +69,7 @@ import {EventBus} from '@/eventbus'
 
 export default {
   name: 'sites',
-  props: ['folder'],
+  props: ['folder', 'isBaulEmpty'],
   mixins: [defaultMixin],
   data () {
     return {
@@ -69,24 +79,43 @@ export default {
   methods: {
     findSites () {
       EventBus.$emit('loading', true)
-      if (this.folder['.key'] === 'all') {
-        this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}`), null, () => {
-          EventBus.$emit('loading', false)
-        })
-      } else if (this.folder['.key'] === 'starred') {
-        this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}`).orderByChild('isfavorite').equalTo(true), null, () => {
-          EventBus.$emit('loading', false)
-        })
-      } else {
-        this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}`).orderByChild('folder').equalTo(this.folder['.key']), null, () => {
-          EventBus.$emit('loading', false)
-        })
+      switch (this.folder['.key']) {
+        case 'all':
+          this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}`))
+          break
+        case 'starred':
+          this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}`).orderByChild('isfavorite').equalTo(true))
+          break
+        case 'trash':
+          this.$bindAsArray('sites', db.ref(`trashes/${this.currentUser.uid}`))
+          break
+        default:
+          this.$bindAsArray('sites', db.ref(`sites/${this.currentUser.uid}`).orderByChild('folder').equalTo(this.folder['.key']))
       }
+
+      EventBus.$emit('loading', false)
     },
-    deleteSite (folder, site) {
+    deleteSite (site) {
       this.showDeleteConfirmation('¿Seguro que quieres eliminar el sitio?', 'is-bottom-right', () => {
-        db.ref(`sites/${this.currentUser.uid}/${site}`).remove()
+        db.ref(`sites/${this.currentUser.uid}/${site['.key']}`).remove()
+        // set on trash
+        const refTrash = `trashes/${this.currentUser.uid}/${site['.key']}`
+        delete site['.key']
+        db.ref(refTrash).set(site)
         this.showNotification('Se eliminó correctamente', false)
+      })
+    },
+    rescueSite (site) {
+      db.ref(`trashes/${this.currentUser.uid}/${site['.key']}`).remove()
+      // set on sites
+      db.ref(`folders/${this.currentUser.uid}/${site.folder}`).once('value', (snapshot) => {
+        if (snapshot.val() === null) {
+          db.ref(`folders/${this.currentUser.uid}/${site.folder}`).set(site.folder)
+        }
+        const refSite = `sites/${this.currentUser.uid}/${site['.key']}`
+        delete site['.key']
+        db.ref(refSite).set(site)
+        this.showNotification('Recuperaste el sitio', false)
       })
     },
     getFormattedSiteDate (site) {
@@ -103,8 +132,10 @@ export default {
     }
   },
   watch: {
-    folder () {
-      this.findSites()
+    folder (value) {
+      if (value !== null) {
+        this.findSites()
+      }
     }
   }
 }

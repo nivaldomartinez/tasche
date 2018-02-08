@@ -1,21 +1,21 @@
 <template>
   <div class="mainContainer">
-    <div class="columns is-centered" v-if="isBaulEmpty && !isLoading">
-      <div class="column is-half">
-        <section class="section">
-          <h4 class="subtitle is-4 has-text-grey has-text-centered">No tienes nada en tu baúl, empieza a agregar sitios.</h4>
-          <h4 class="subtitle is-4 has-text-grey has-text-centered">Haz click en el botón <strong>Agregar</strong></h4>
-        </section>
-      </div>
-    </div>
     <div class="columns">
-      <div class="column is-2 withScroll" :class="{sidebar: !isBaulEmpty}">
+      <div class="column sidebar is-2 withScroll">
         <folders @selected="onSelectFolder"></folders>
       </div>
       <div class="column withScroll" id="sites">
         <section class="section">
           <div class="container is-fluid">
-            <sites :folder="selectedFolder"></sites>
+            <div class="columns is-centered" v-if="isBaulEmpty && !isLoading">
+              <div class="column is-half">
+                <section class="section">
+                  <h4 class="subtitle is-4 has-text-grey has-text-centered">No tienes nada en tu baúl, empieza a agregar sitios.</h4>
+                  <h4 class="subtitle is-4 has-text-grey has-text-centered">Haz click en el botón <strong>Agregar</strong></h4>
+                </section>
+              </div>
+            </div>
+            <sites :folder="selectedFolder" :isBaulEmpty="isBaulEmpty"></sites>
           </div>
         </section>
       </div>
