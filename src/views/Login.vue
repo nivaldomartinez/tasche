@@ -49,11 +49,14 @@ export default {
             this.showNotification(`Entraste como ${result.user.displayName}`, false)
             this.$router.push('/dashboard')
           } else {
-            db.ref('profile').child(result.user.uid).update(this.prepareUser(result.user)).then(() => {
-              this.isLoading = false
-              localStorage.setItem('tutorial', 'true')
-              this.showNotification(`Te registraste como ${result.user.displayName}`, false)
-              this.$router.push('/dashboard')
+            db.ref('profile').child(result.user.uid).on('value', (snapshot) => {
+              if (snapshot.val() !== null) {
+                localStorage.setItem('user', JSON.stringify(snapshot.val()))
+                this.isLoading = false
+                localStorage.setItem('tutorial', 'true')
+                this.showNotification(`Te registraste como ${result.user.displayName}`, false)
+                this.$router.push('/dashboard')
+              }
             })
           }
         })
@@ -76,16 +79,6 @@ export default {
       }
 
       this.loginWith(provider)
-    },
-    prepareUser (dbuser) {
-      let user = {}
-      user.name = dbuser.displayName
-      user.email = dbuser.email
-      user.photo = dbuser.photoURL
-      user.phone = dbuser.phoneNumber
-      user.uid = dbuser.uid
-
-      return user
     },
     getUserData (userId, callback) {
       db.ref('profile').child(userId).once('value', (snapshot) => {

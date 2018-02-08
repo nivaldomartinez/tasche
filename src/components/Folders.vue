@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="columns is-multiline">
-    <div class="column is-12 folder" @click="onClickFolder(item)" v-for="item in menuItems" v-if="folders" :class="{'is-active':item['.key'] === selectedFolder['.key']}">
+  <div class="columns is-multiline" v-if="folders.length !== 0">
+    <div class="column is-12 folder" @click="onClickFolder(item)" v-for="item in menuItems" :class="{'is-active':item['.key'] === selectedFolder['.key']}">
       <article class="media">
         <div class="media-left">
           <i class="fa" :class="[
@@ -17,7 +17,7 @@
       </article>
     </div>
     <h6 class="subtitle is-6 has-text-grey-light" style="margin-top: 20px; margin-bottom: 20px">Carpetas</h6>
-    <div class="column is-12 folder"  @click="onClickFolder(folder)" v-for="folder in folders" v-if="folders" :class="{'is-active':folder['.key'] === selectedFolder['.key']}">
+    <div class="column is-12 folder"  @click="onClickFolder(folder)" v-for="folder in folders" :class="{'is-active':folder['.key'] === selectedFolder['.key']}">
       <article class="media">
         <div class="media-left">
           <i class="fa fa-folder" :class="{
@@ -88,6 +88,7 @@ export default {
   },
   watch: {
     folders (value) {
+      console.log(value)
       if (value.length > 0) {
         EventBus.$emit('emptyBaul', false)
       } else {

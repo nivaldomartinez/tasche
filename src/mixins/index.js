@@ -1,4 +1,7 @@
 export const defaultMixin = {
+  created () {
+    this.currentUser = JSON.parse(localStorage.getItem('user'))
+  },
   data () {
     return {
       currentUser: JSON.parse(localStorage.getItem('user'))

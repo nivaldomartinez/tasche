@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="columns">
-      <div class="column sidebar is-2 withScroll">
+      <div class="column is-2 withScroll" :class="{sidebar: !isBaulEmpty}">
         <folders @selected="onSelectFolder"></folders>
       </div>
       <div class="column withScroll" id="sites">

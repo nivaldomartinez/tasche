@@ -86,7 +86,8 @@ export default {
         folder: null,
         description: '',
         imageurl: null,
-        timestamp: null
+        timestamp: null,
+        isfavorite: false
       },
       rules: {
         name: [
