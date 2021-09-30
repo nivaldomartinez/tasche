@@ -5,8 +5,8 @@
         <div class="level">
           <div class="level-item"></div>
           <div class="level-item">
-            <h1 class="title is-12 has-text-info" v-if="getKey() === undefined">Nuevo Sitio</h1>
-            <h1 class="title is-12 has-text-info" v-if="getKey() !== undefined">Editar Sitio</h1>
+            <h1 class="title is-12 has-text-info gradient-title" v-if="getKey() === undefined">Nuevo Sitio</h1>
+            <h1 class="title is-12 has-text-info gradient-title" v-if="getKey() !== undefined">Editar Sitio</h1>
           </div>
           <div class="level-item">
             <a href="javascript:;" @click="cancelModal">

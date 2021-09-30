@@ -1,9 +1,12 @@
 <template lang="html">
   <div class="hero is-fullheight">
     <div class="hero-body columns is-centered">
-      <div class="column is-one-quarter has-text-centered">
-        <img src="/static/images/typelogo.png" alt="tasche" width="90%">
-        <p class="subtitle is-6">Entrar con</p>
+      <div class="column is-three-fifths has-text-centered">
+        <h1 class="gradient-title display">TASCHE</h1>
+        <span class="subtitle is-6">Organiza todos tus links en un solo lugar.</span>
+        <div class="mt-5">
+         <small class="subtitle is-size-7">Entra con</small>
+        </div>
         <button class="loginBtn loginBtn--google" :disabled="isLoading" @click="onLoginButtonClick('google')">Google</button>
         <button class="loginBtn loginBtn--twitter" :disabled="isLoading" @click="onLoginButtonClick('twitter')">Twitter</button>
         <button class="loginBtn loginBtn--github" :disabled="isLoading" @click="onLoginButtonClick('github')">Github</button>
@@ -92,6 +95,8 @@ export default {
 
 <style scoped>
 
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&display=swap');
+
 /* Shared */
 .loginBtn {
   box-sizing: border-box;
@@ -126,41 +131,38 @@ export default {
 
 /* Twitter */
 .loginBtn--twitter {
-  background: #00aced;
+  background: #3a3f44;
 }
 .loginBtn--twitter:before {
-  border-right: #0084b4 1px solid;
   background: url('/static/images/twitter-icon.png') 6px 6px no-repeat;
 }
 .loginBtn--twitter:hover,
 .loginBtn--twitter:focus {
-  background: #1dcaff;
+  background: #00aced;
 }
 
 /* Github */
 
 .loginBtn--github {
-  background: #24292e;
+  background: #3a3f44;
 }
 .loginBtn--github:before {
-  border-right: #000 1px solid;
   background: url('/static/images/github-icon.png') 6px 6px no-repeat;
 }
 .loginBtn--github:hover,
 .loginBtn--github:focus {
-  background: #2b3137;
+  background: #24292e;
 }
 
 /* Google */
 .loginBtn--google {
-  background: #DD4B39;
+  background: #3a3f44;
 }
 .loginBtn--google:before {
-  border-right: #BB3F30 1px solid;
   background: url('/static/images/google-icon.png') 6px 6px no-repeat;
 }
 .loginBtn--google:hover,
 .loginBtn--google:focus {
-  background: #E74B37;
+  background: #DD4B39;
 }
 </style>

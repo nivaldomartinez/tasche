@@ -6,7 +6,8 @@ const config = {
   databaseURL: 'https://tasche-web.firebaseio.com',
   projectId: 'tasche-web',
   storageBucket: 'tasche-web.appspot.com',
-  messagingSenderId: '542476823252'
+  messagingSenderId: '542476823252',
+  appId: '1:542476823252:web:d663d4afb67d53bd3fe941'
 }
 
 Firebase.initializeApp(config)

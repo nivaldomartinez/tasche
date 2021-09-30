@@ -30,4 +30,17 @@ body {
 .vue-tooltip.info .tooltip-arrow {
   border-color: #167df0;
 }
+
+.gradient-title {
+  font-size: 40px;
+  background: -webkit-linear-gradient(left, #167df0 0%, #6a11cb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+.gradient-title.display {
+  font-size: 72px;
+  font-family: 'Work Sans', sans-serif;
+}
 </style>
