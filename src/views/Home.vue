@@ -62,7 +62,7 @@ export default {
 
   .withScroll {
     overflow-y: scroll;
-    height: 95vh;
+    height: 93.6vh;
   }
 
   .columns {
@@ -70,7 +70,7 @@ export default {
   }
 
   .mainContainer {
-    height: 95vh;
+    height: 93.6vh;
   }
 
   @media only screen and (max-width: 768px) {
@@ -81,7 +81,7 @@ export default {
         height: 67vh;
     }
     .mainContainer {
-      height: 95vh;
+      height: 93.6vh;
     }
   }
 

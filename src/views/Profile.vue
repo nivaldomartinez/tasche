@@ -18,9 +18,8 @@
         <div class="container is-widescreen has-text-centered">
           <div class="columns is-centered">
             <div class="column is-4">
-              <figure class="image is-128x128 is-centered-image" >
-              <progressive-background class="image is-128x128 is-centered-image" :src="currentUser.photo" fallback="/static/images/no-photo.png"
-              @click="onClickImage"/>
+              <figure class="image is-128x128 is-centered-image" @click="onClickImage" >
+              <progressive-background class="image is-128x128 is-centered-image" :src="currentUser.photo" fallback="/static/images/no-photo.png"/>
                 <i class="fa fa-pencil-alt edit-button"></i>
               </figure>
               <input type="file" accept="image/*" ref="fileInput" @change="onSelectFile" v-show="false">

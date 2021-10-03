@@ -24,7 +24,7 @@
         <div class="navbar-end">
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
-              <div class="image is-32x32 profile-photo" :style="{ backgroundImage: `url('${currentUser.photo}')` }"></div>
+            <progressive-background class="image is-32x32 profile-photo" :src="currentUser.photo" fallback="/static/images/no-photo.png"/>
               {{ currentUser.name }}
             </a>
             <div class="navbar-dropdown">

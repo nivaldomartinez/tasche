@@ -21,13 +21,19 @@
             <nav class="level" v-if="folder['.key'] !== 'trash'">
               <div class="level-left">
                 <a class="level-item">
-                  <a class="has-text-grey" :href="site.url" target="_blank"><i class="fas fa-external-link-square-alt"></i></a>
+                  <a class="has-text-grey" :href="site.url" target="_blank">
+                    <i v-tooltip.bottom="'Abrir'" class="fas fa-external-link-square-alt"></i>
+                  </a>
                 </a>
                 <a class="level-item">
-                  <a class="has-text-grey" @click="$router.push({name: 'editsite', params: {key:site['.key'], folder:site.folder}})"><i class="fas fa-edit"></i></a>
+                  <a class="has-text-grey" @click="$router.push({name: 'editsite', params: {key:site['.key'], folder:site.folder}})">
+                    <i v-tooltip.bottom="'Editar'" class="fas fa-edit"></i>
+                  </a>
                 </a>
                 <a class="level-item">
-                  <a :class="[site.isfavorite ? 'has-text-danger' : 'has-text-grey']" @click="setFavorite(site)"><i class="fas fa-heart"></i></a>
+                  <a :class="[site.isfavorite ? 'has-text-danger' : 'has-text-grey']" @click="setFavorite(site)">
+                    <i v-tooltip.bottom="{content: site.isfavorite ? 'Quitar favorito' : 'Favorito'}" class="fas fa-heart"></i>
+                  </a>
                 </a>
               </div>
               <div class="level-right">
@@ -35,14 +41,18 @@
                   <a class="has-text-grey">{{ getFormattedSiteDate(site) }}</a>
                 </a>
                 <a class="level-item">
-                  <a class="has-text-grey" @click="deleteSite(site)"><i class="fas fa-trash"></i></a>
+                  <a class="has-text-grey" @click="deleteSite(site)">
+                    <i v-tooltip.bottom="'Eliminar'" class="fas fa-trash"></i>
+                  </a>
                 </a>
               </div>
             </nav>
             <nav class="level" v-if="folder['.key'] === 'trash'">
               <div class="level-left">
                 <a class="level-item">
-                  <a class="has-text-grey" @click="rescueSite(site)"><i class="fas fa-save"></i></a>
+                  <a class="has-text-grey" @click="rescueSite(site)">
+                    <i v-tooltip.bottom="'Recuperar sitio'" class="fas fa-save"></i>
+                  </a>
                 </a>
               </div>
             </nav>
