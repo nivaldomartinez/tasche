@@ -52,14 +52,16 @@ export default {
             this.showNotification(`Entraste como ${result.user.displayName}`, false)
             this.$router.push('/dashboard')
           } else {
-            db.ref('profile').child(result.user.uid).on('value', (snapshot) => {
-              if (snapshot.val() !== null) {
-                localStorage.setItem('user', JSON.stringify(snapshot.val()))
-                this.isLoading = false
-                localStorage.setItem('tutorial', 'true')
-                this.showNotification(`Te registraste como ${result.user.displayName}`, false)
-                this.$router.push('/dashboard')
-              }
+            const { email, displayName: name, photoURL: photo, uid } = result.user
+            const user = { email, name, photo: photo || '', uid }
+            db.ref('profile').child(result.user.uid).update(user).then(() => {
+              localStorage.setItem('user', JSON.stringify(user))
+              this.isLoading = false
+              localStorage.setItem('tutorial', 'true')
+              this.showNotification(`Te registraste como ${result.user.displayName}`, false)
+              this.$router.push('/dashboard')
+            }).catch(error => {
+              this.showNotification(`Ocurrió un error ${error.message}`, false)
             })
           }
         })

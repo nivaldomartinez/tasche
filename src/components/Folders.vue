@@ -68,7 +68,11 @@ export default {
     return {
       folders: null,
       selectedFolder: {},
-      menuItems: [{name: 'Todos', '.key': 'all', icon: 'fa-paperclip'}, {name: 'Favoritos', '.key': 'starred', icon: 'fa-star'}, {name: 'Papelera', '.key': 'trash', icon: 'fa-trash'}],
+      menuItems: [
+        {name: 'Todos', '.key': 'all', icon: 'fa-paperclip'},
+        {name: 'Favoritos', '.key': 'starred', icon: 'fa-heart'},
+        {name: 'Papelera', '.key': 'trash', icon: 'fa-trash'}
+      ],
       deleteSites: []
     }
   },

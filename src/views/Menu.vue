@@ -19,7 +19,7 @@
         <div class="navbar-start">
           <router-link class="navbar-item" :to="{name: 'addsite'}"
           v-tooltip.right.notrigger="tooltipMenu">
-          <i class="fa fa-file-alt" style="margin-right:10px" @click="file = ''"></i><p @click="file = ''">Agregar</p></router-link>
+          <i class="fa fa-file-alt" style="margin-right:10px" @click="file = ''"></i><p @click="file = ''">Agregar Sitio</p></router-link>
         </div>
         <div class="navbar-end">
           <div class="navbar-item has-dropdown is-hoverable">

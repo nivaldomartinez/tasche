@@ -128,7 +128,9 @@ export default {
       const reference = db.ref(`sites/${this.currentUser.uid}`)
       const key = reference.push().key
       reference.child(key).update(this.selected).then(() => {
-        localStorage.removeItem('tutorial')
+        if (localStorage.tutorial) {
+          localStorage.removeItem('tutorial')
+        }
         this.isLoading = false
         this.saveFolder()
         this.showNotification('Sitio agregado correctamente', false)
@@ -179,7 +181,8 @@ export default {
       }
     },
     changef (event) {
-      if (this.selected.folder !== this.lowerFolder) {
+      const folderIndex = this.folders.findIndex(folder => folder['.key'] === event)
+      if (folderIndex === -1) {
         this.newFolderName = event
       }
     },

@@ -1,60 +1,52 @@
 <template lang="html">
-  <div class="columns is-centered is-multiline" v-if="folder && !isBaulEmpty">
-    <div class="column is-12" v-if="sites.length === 0 && folder['.key'] === 'starred' && !isBaulEmpty">
-      <h4 class="subtitle is-4 has-text-grey has-text-centered">No has marcado ningún sitio como favorito.</h4>
-      <h4 class="subtitle is-4 has-text-grey has-text-centered">Haz click en el botón <strong><i class="fas fa-star"></i></strong> del sitio para marcarlo como favorito.</h4>
-    </div>
-    <div class="column is-12" v-if="sites.length === 0 && folder['.key'] === 'trash' && !isBaulEmpty">
-      <h4 class="subtitle is-4 has-text-grey has-text-centered">Papelera vacía.</h4>
-    </div>
-    <div class="column is-12" v-if="sites.length === 0 && folder['.key'] !== 'starred' && folder['.key'] !== 'all' && folder['.key'] !== 'trash'">
-      <h4 class="subtitle is-4 has-text-grey has-text-centered">Carpeta vacía.</h4>
-    </div>
-    <div class="column is-one-third" v-for="site in sites">
-      <div class="card">
-        <div class="card-content">
-          <div class="media">
-            <div class="media-left">
-              <figure class="image is-48x48">
-                <progressive-img :src="site.imageurl" fallback="/static/images/no-photo.png"/>
-              </figure>
+  <div>
+    <div class="columns is-centered is-multiline" v-if="folder">
+      <div class="column is-one-third" v-for="site in sites">
+        <div class="card">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <progressive-img :src="site.imageurl" fallback="/static/images/no-photo.png"/>
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">{{site.name}}</p>
+              </div>
             </div>
-            <div class="media-content">
-              <p class="title is-4">{{site.name}}</p>
-            </div>
-          </div>
 
-          <div class="content">
-            {{site.description}}
+            <div class="content">
+              {{site.description}}
+            </div>
+            <nav class="level" v-if="folder['.key'] !== 'trash'">
+              <div class="level-left">
+                <a class="level-item">
+                  <a class="has-text-grey" :href="site.url" target="_blank"><i class="fas fa-external-link-square-alt"></i></a>
+                </a>
+                <a class="level-item">
+                  <a class="has-text-grey" @click="$router.push({name: 'editsite', params: {key:site['.key'], folder:site.folder}})"><i class="fas fa-edit"></i></a>
+                </a>
+                <a class="level-item">
+                  <a :class="[site.isfavorite ? 'has-text-danger' : 'has-text-grey']" @click="setFavorite(site)"><i class="fas fa-heart"></i></a>
+                </a>
+              </div>
+              <div class="level-right">
+                <a class="level-item">
+                  <a class="has-text-grey">{{ getFormattedSiteDate(site) }}</a>
+                </a>
+                <a class="level-item">
+                  <a class="has-text-grey" @click="deleteSite(site)"><i class="fas fa-trash"></i></a>
+                </a>
+              </div>
+            </nav>
+            <nav class="level" v-if="folder['.key'] === 'trash'">
+              <div class="level-left">
+                <a class="level-item">
+                  <a class="has-text-grey" @click="rescueSite(site)"><i class="fas fa-save"></i></a>
+                </a>
+              </div>
+            </nav>
           </div>
-          <nav class="level" v-if="folder['.key'] !== 'trash'">
-            <div class="level-left">
-              <a class="level-item">
-                <a class="has-text-grey" :href="site.url" target="_blank"><i class="fas fa-external-link-square-alt"></i></a>
-              </a>
-              <a class="level-item">
-                <a class="has-text-grey" @click="$router.push({name: 'editsite', params: {key:site['.key'], folder:site.folder}})"><i class="fas fa-edit"></i></a>
-              </a>
-              <a class="level-item">
-                <a :class="[site.isfavorite ? 'has-text-warning' : 'has-text-grey']" @click="setFavorite(site)"><i class="fas fa-star"></i></a>
-              </a>
-            </div>
-            <div class="level-right">
-              <a class="level-item">
-                <a class="has-text-grey">{{ getFormattedSiteDate(site) }}</a>
-              </a>
-              <a class="level-item">
-                <a class="has-text-grey" @click="deleteSite(site)"><i class="fas fa-trash"></i></a>
-              </a>
-            </div>
-          </nav>
-          <nav class="level" v-if="folder['.key'] === 'trash'">
-            <div class="level-left">
-              <a class="level-item">
-                <a class="has-text-grey" @click="rescueSite(site)"><i class="fas fa-save"></i></a>
-              </a>
-            </div>
-          </nav>
         </div>
       </div>
     </div>
@@ -69,7 +61,7 @@ import {EventBus} from '@/eventbus'
 
 export default {
   name: 'sites',
-  props: ['folder', 'isBaulEmpty'],
+  props: ['folder'],
   mixins: [defaultMixin],
   data () {
     return {
@@ -136,6 +128,9 @@ export default {
       if (value !== null) {
         this.findSites()
       }
+    },
+    sites (value) {
+      EventBus.$emit('hasNotSites', value.length === 0)
     }
   }
 }

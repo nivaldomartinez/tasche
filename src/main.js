@@ -1,19 +1,18 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-import App from './App'
-import router from './router'
-import VueFire from 'vuefire'
-import {Input, Form, FormItem, Select, Option} from 'element-ui'
-import Tooltip from 'vue-directive-tooltip'
-import VueProgressiveImage from 'vue-progressive-image'
-
 // UI
 import Buefy from 'buefy'
-import 'buefy/lib/buefy.css'
-
+import 'buefy/dist/buefy.css'
+import { Form, FormItem, Input, Option, Select } from 'element-ui'
+import Vue from 'vue'
+import Tooltip from 'vue-directive-tooltip'
 // Tooltip
 import 'vue-directive-tooltip/css/index.css'
+import VueProgressiveImage from 'vue-progressive-image'
+import VueFire from 'vuefire'
+import App from './App'
+import router from './router'
+
 Vue.use(Tooltip)
 // buefy
 Vue.use(Buefy)
