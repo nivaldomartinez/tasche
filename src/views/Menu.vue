@@ -22,6 +22,9 @@
           <i class="fa fa-file-alt" style="margin-right:10px" @click="file = ''"></i><p @click="file = ''">Agregar Sitio</p></router-link>
         </div>
         <div class="navbar-end">
+          <div class="dark-mode-container">
+            <i class="fas fa-moon pointer" :class="[darkMode ? 'has-text-warning' : '']" @click="switchDarkMode"></i>
+          </div>
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
             <progressive-background class="image is-32x32 profile-photo" :src="currentUser.photo" fallback="/static/images/no-photo.png"/>
@@ -63,11 +66,25 @@ export default {
       this.currentUser = user
     })
   },
+  mounted() {
+    // check for active theme
+    const htmlElement = document.documentElement
+    const theme = localStorage.getItem('theme')
+
+    if (theme === 'dark') {
+      htmlElement.setAttribute('theme', 'dark')
+      this.darkMode = true
+    } else {
+      htmlElement.setAttribute('theme', 'light')
+      this.darkMode = false
+    }
+  },
   data () {
     return {
       isMenuActive: false,
       currentUser: JSON.parse(localStorage.getItem('user')),
-      isLoading: false
+      isLoading: false,
+      darkMode: false
     }
   },
   components: {
@@ -79,11 +96,30 @@ export default {
     },
     logout () {
       auth.signOut().then(() => {
+        const theme = localStorage.theme
         localStorage.clear()
+        localStorage.setItem('theme', theme)
         this.$router.push('/')
       }).catch((error) => {
         console.log(error)
       })
+    },
+    switchDarkMode () {
+      this.darkMode = !this.darkMode
+    }
+  },
+  watch: {
+    darkMode: function () {
+      // add/remove class to/from html tag
+      let htmlElement = document.documentElement
+
+      if (this.darkMode) {
+        localStorage.setItem('theme', 'dark')
+        htmlElement.setAttribute('theme', 'dark')
+      } else {
+        localStorage.setItem('theme', 'light')
+        htmlElement.setAttribute('theme', 'light')
+      }
     }
   }
 }
@@ -124,5 +160,11 @@ export default {
   .navbar.is-info .navbar-item.has-dropdown.is-active .navbar-link{
     background-color: #6a11cb;
     color: white;
+  }
+
+  .dark-mode-container {
+    display: flex;
+    align-items: center;
+    margin-right: 28px;
   }
 </style>

@@ -7,14 +7,22 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  mounted() {
+    // check for active theme
+    const htmlElement = document.documentElement
+    const theme = localStorage.getItem('theme')
+
+    if (theme === 'dark') {
+      htmlElement.setAttribute('theme', 'dark')
+    } else {
+      htmlElement.setAttribute('theme', 'light')
+    }
+  }
 }
 </script>
 
 <style>
-body {
-  background-color: #F9F9F9;
-}
 
 .vue-tooltip.menu {
   background-color: #F9F9F9;

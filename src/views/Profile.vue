@@ -101,6 +101,7 @@ export default {
           this.isLoading = false
           this.currentUser.photo = await ref.getDownloadURL()
           localStorage.setItem('user', JSON.stringify(this.currentUser))
+          this.onClickSaveButton(false)
           this.showNotification('Se actualizó tu foto de perfil', false)
           this.emitChanges()
         }).catch((e) => {
@@ -110,14 +111,16 @@ export default {
         })
       }
     },
-    onClickSaveButton () {
+    onClickSaveButton (showUpdateProfile = true) {
       this.isLoading = true
       db.ref('profile').child(this.currentUser.uid).update(this.currentUser).then(() => {
         this.isLoading = false
-        localStorage.setItem('user', JSON.stringify(this.currentUser))
-        this.showNotification('Se actualizó tu perfil', false)
-        this.emitChanges()
-        this.cancelModal()
+        if (showUpdateProfile) {
+          localStorage.setItem('user', JSON.stringify(this.currentUser))
+          this.showNotification('Se actualizó tu perfil', false)
+          this.emitChanges()
+          this.cancelModal()
+        }
       }).catch(() => {
         this.isLoading = false
         this.showNotification('Ocurrió un error por favor intentalo mas tarde', true)

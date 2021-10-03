@@ -1,0 +1,77 @@
+:root {
+  --app-background-color: #F9F9F9;
+  --input-background: #fff;
+  --input-border-color: #dcdfe6;
+  --input-color: #606266;
+  --card-background: #fff;
+  --card-content-color: #4a4a4a;
+  --gray-text-color: #7a7a7a;
+  --disable-input-background: #f5f7fa;
+  --subtitle-color: #4a4a4a;
+}
+
+[theme="dark"] {
+  --app-background-color: #1e2529;
+  --input-background: #262F34;
+  --input-border-color: #505256;
+  --input-color: #c1c3c7;
+  --card-background: #263033;
+  --card-content-color: #F9F9F9;
+  --gray-text-color: #b5b4b4;
+  --disable-input-background: #333a3c;
+  --subtitle-color: #d6d6d6;
+}
+
+/*
+* === BODY, APP BACKGROUND ETC. ===
+*/
+body {
+  background-color: var(--app-background-color);
+}
+
+.container {
+  max-width: 1040px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.hero {
+  background-color: var(--app-background-color);
+}
+
+.el-input__inner, .el-textarea__inner {
+  background-color: var(--input-background);
+  border: 1px solid var(--input-border-color);
+  color: var(--input-color);
+}
+
+.card {
+  background-color: var(--card-background) !important;
+  color: var(--card-content-color) !important;
+}
+
+.title {
+  color: var(--card-content-color) !important;
+}
+
+.has-text-grey {
+  color: var(--gray-text-color) !important;
+}
+
+.el-input.is-disabled .el-input__inner {
+  background-color: var(--disable-input-background);
+  border-color: var(--input-border-color);
+  color: #c0c4cc;
+  cursor: not-allowed;
+}
+
+.subtitle {
+  color: var(--subtitle-color);
+}
+
+.navbar-dropdown {
+  background-color: var(--app-background-color);
+  border-top-color: var(--input-border-color);
+}
